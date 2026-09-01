@@ -856,472 +856,412 @@
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+  <script>
+    const BIN_ID = '6a968079da38895dfe29ba7f';
+    const MASTER_KEY = '$2a$10$ns1OSogNiANZAJ/k6optMe3/GND7i84vrBQY7zzm.l12JR0mNdD5u';
+    const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-        // Menerima Config Bawaan Server
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'umrah-app-default';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        
-        let app, auth, db, userId;
+    let appData = { html: "", airline: "saudia", progress: {} };
+    window.isEditMode = false;
+    window.sortableInstance = null;
+    let userProgress = {}; 
 
-        // --- Variabel Utama ---
-        window.isEditMode = false;
-        window.sortableInstance = null;
-        let pendingAction = null; 
-        let userProgress = {}; // Menyimpan status checklist pribadi dari Cloud
-
-        // --- Inisialisasi Firebase ---
+    // --- 1. Load Data dari JSONBin ---
+    async function initCloud() {
         try {
-            app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-        } catch (e) {
-            console.error("Firebase init error:", e);
-        }
-
-        // --- Setup Autentikasi & Database Real-time ---
-        async function initCloud() {
-            if (!auth) return;
-            try {
-                if (typeof __initial_auth_token !== 'undefined') {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
+            const response = await fetch(API_URL, {
+                headers: { 'X-Master-Key': MASTER_KEY }
+            });
+            const result = await response.json();
+            if (result.record) {
+                appData = result.record;
+                if (appData.html && !window.isEditMode) {
+                    document.getElementById('main-content-area').innerHTML = appData.html;
                 }
-                userId = auth.currentUser?.uid || crypto.randomUUID();
-                setupRealtime(); // Mulai memantau perubahan data
-            } catch (error) {
-                console.error("Auth failed:", error);
-            }
-        }
-
-        function setupRealtime() {
-            // 1. Memantau Tampilan Tata Letak / Konten secara Global
-            const layoutRef = doc(db, 'artifacts', appId, 'public', 'data', 'state', 'layout');
-            onSnapshot(layoutRef, (snapshot) => {
-                if (snapshot.exists()) {
-                    const data = snapshot.data();
-                    // Jangan timpa teks jika admin sedang aktif mengedit
-                    if (!window.isEditMode) {
-                        if (data.html) {
-                            const mainArea = document.getElementById('main-content-area');
-                            if (mainArea.innerHTML !== data.html) {
-                                mainArea.innerHTML = data.html;
-                                applyProgress(); // Terapkan ulang centang karena innerHTML mereset input
-                            }
-                        }
-                        if (data.airline) {
-                            window.changeAirline(data.airline, false); 
-                            const sel = document.getElementById('airline-selector');
-                            if (sel) sel.value = data.airline;
-                        }
-                    }
+                if (appData.airline) {
+                    window.changeAirline(appData.airline, false);
+                    const sel = document.getElementById('airline-selector');
+                    if (sel) sel.value = appData.airline;
                 }
-            }, (err) => console.error("Snapshot error:", err));
-
-            // 2. Memantau Progress Pribadi (Checklist Masing-Masing Jamaah)
-            const progressRef = doc(db, 'artifacts', appId, 'users', userId, 'progress', 'checkboxes');
-            onSnapshot(progressRef, (snapshot) => {
-                if (snapshot.exists()) {
-                    userProgress = snapshot.data();
-                } else {
-                    userProgress = {};
-                }
+                userProgress = appData.progress || {};
                 applyProgress();
-            }, (err) => console.error("Snapshot progress error:", err));
-        }
-
-        // --- Logika Pilihan Maskapai ---
-        const airlines = {
-            'saudia': { name: 'Saudia Airlines' },
-            'lion': { name: 'Lion Air' },
-            'emirates': { name: 'Emirates' },
-            'scoot': { name: 'Scoot' },
-            'qatar': { name: 'Qatar Airways' },
-            'garuda': { name: 'Garuda Indonesia' }
-        };
-
-        window.changeAirline = function(val, triggerSave = true) {
-            const airline = airlines[val];
-            if(airline) {
-                const textDisplay = document.getElementById('airline-name-display');
-                if(textDisplay) textDisplay.textContent = airline.name;
-                
-                // Simpan otomatis ke cloud jika sedang diubah dalam Mode Edit
-                if (triggerSave && window.isEditMode) window.saveLayoutToCloud();
             }
-        };
+        } catch (err) {
+            console.error("Gagal memuat data dari JSONBin:", err);
+        }
+    }
 
-        // --- Logika Progres Checklist ---
-        function applyProgress() {
-            document.querySelectorAll('.checklist-item').forEach(cb => {
-                cb.checked = !!userProgress[cb.id];
+    // --- 2. Fungsi Save Global (Untuk PUT ke JSONBin) ---
+    async function pushToCloud() {
+        try {
+            await fetch(API_URL, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': MASTER_KEY
+                },
+                body: JSON.stringify(appData)
             });
-            window.updateProgress();
+            console.log("Berhasil tersimpan ke JSONBin");
+        } catch (err) {
+            console.error("Gagal menyimpan data:", err);
+        }
+    }
+
+    // --- 3. Override Fungsi Simpan Bawaan ---
+    window.saveLayoutToCloud = function() {
+        const mainArea = document.getElementById('main-content-area');
+        const selectedAirline = document.getElementById('airline-selector')?.value || 'saudia';
+        
+        appData.html = mainArea.innerHTML;
+        appData.airline = selectedAirline;
+        pushToCloud();
+    };
+
+    window.saveProgressToCloud = function(id, isChecked) {
+        userProgress[id] = isChecked;
+        appData.progress = userProgress;
+        pushToCloud();
+    };
+
+    // --- 4. Fungsi Bawaan Web ---
+    const airlines = {
+        'saudia': { name: 'Saudia Airlines' },
+        'lion': { name: 'Lion Air' },
+        'emirates': { name: 'Emirates' },
+        'scoot': { name: 'Scoot' },
+        'qatar': { name: 'Qatar Airways' },
+        'garuda': { name: 'Garuda Indonesia' }
+    };
+
+    window.changeAirline = function(val, triggerSave = true) {
+        const airline = airlines[val];
+        if(airline) {
+            const textDisplay = document.getElementById('airline-name-display');
+            if(textDisplay) textDisplay.textContent = airline.name;
+            if (triggerSave && window.isEditMode) window.saveLayoutToCloud();
+        }
+    };
+
+    function applyProgress() {
+        document.querySelectorAll('.checklist-item').forEach(cb => {
+            cb.checked = !!userProgress[cb.id];
+        });
+        window.updateProgress();
+    }
+
+    window.updateProgress = function() {
+        const checkboxes = document.querySelectorAll('.checklist-item');
+        const total = checkboxes.length;
+        const checked = document.querySelectorAll('.checklist-item:checked').length;
+        const percentage = total === 0 ? 0 : Math.round((checked / total) * 100);
+        
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        
+        if (!progressBar || !progressText) return; 
+        
+        progressBar.style.width = `${percentage}%`;
+        progressText.innerText = `${percentage}%`;
+
+        if(percentage === 100 && total > 0) {
+            progressBar.classList.remove('from-gold-400', 'to-gold-600');
+            progressBar.classList.add('from-emerald-400', 'to-emerald-600');
+            progressText.classList.replace('text-emerald-600', 'text-white');
+            progressText.classList.replace('bg-emerald-50', 'bg-emerald-500');
+        } else {
+            progressBar.classList.add('from-gold-400', 'to-gold-600');
+            progressBar.classList.remove('from-emerald-400', 'to-emerald-600');
+            progressText.classList.replace('text-white', 'text-emerald-600');
+            progressText.classList.replace('bg-emerald-500', 'bg-emerald-50');
+        }
+    };
+
+    window.addChecklistItem = function(containerId) {
+        const container = document.getElementById(containerId);
+        const newId = 'chk-' + Date.now();
+        const colorClass = containerId === 'grid-panas' ? 'amber' : 'emerald';
+        const html = `
+            <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-${colorClass}-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
+                <button class="delete-item-btn absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                <input type="checkbox" class="checklist-item hidden" id="${newId}">
+                <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-${colorClass}-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
+                <span class="text-sm font-medium text-slate-700 editable-text w-full" contenteditable="true">Item Baru</span>
+            </label>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+        window.updateProgress();
+    };
+
+    window.addScheduleItem = function(containerId) {
+        const container = document.getElementById(containerId);
+        const html = `
+            <div class="group flex items-start p-4 bg-slate-50/50 rounded-2xl border border-slate-100 hover:border-emerald-200 hover:bg-emerald-50/50 hover:shadow-sm transition-all relative">
+                <button class="delete-item-btn absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                <span class="bg-white border border-emerald-100 text-emerald-700 font-bold text-xs px-3 py-1.5 rounded-lg mr-4 flex-shrink-0 mt-0.5 shadow-sm editable-text" contenteditable="true">00.00</span>
+                <div class="text-sm font-semibold text-slate-700 mt-1 editable-text w-full" contenteditable="true">Acara Baru</div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+    };
+
+    window.addStatusItem = function(containerId) {
+        const container = document.getElementById(containerId);
+        const html = `
+            <div class="flex items-start p-5 bg-emerald-50/50 rounded-2xl border border-emerald-100 relative pr-10 group hover:shadow-sm transition">
+                <button class="delete-item-btn absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                <div class="bg-white p-1.5 rounded-full shadow-sm mr-4 mt-0.5 flex-shrink-0">
+                    <i class="fa-solid fa-check text-emerald-600"></i>
+                </div>
+                <div class="editable-text text-emerald-900 font-medium pt-1 w-full" contenteditable="true">Informasi Status Baru</div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+    };
+
+    window.addTextItem = function(containerId, iconClass) {
+        const container = document.getElementById(containerId);
+        const html = `
+            <li class="flex items-start relative pr-10 group bg-transparent hover:bg-slate-50 p-3 rounded-xl transition-colors -mx-3">
+                <button class="delete-item-btn absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                <i class="fa-solid ${iconClass} text-emerald-500 mt-1 mr-4 text-lg w-5 text-center"></i>
+                <span class="text-sm sm:text-base text-slate-700 font-medium editable-text w-full" contenteditable="true">Informasi Tambahan Baru</span>
+            </li>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+    };
+
+    let isPlaying = false;
+    let utterance = null;
+    window.playTalbiyah = function() {
+        const btn = document.getElementById('play-talbiyah-btn');
+        const icon = document.getElementById('play-icon');
+        const text = document.getElementById('play-text');
+
+        if (isPlaying) {
+            window.speechSynthesis.cancel();
+            isPlaying = false;
+            icon.className = 'fa-solid fa-play mr-2';
+            text.innerText = 'Dengarkan Audio Niat';
+            btn.classList.replace('bg-red-500', 'bg-indigo-600');
+            btn.classList.replace('hover:bg-red-600', 'hover:bg-indigo-700');
+            return;
         }
 
-        window.updateProgress = function() {
-            const checkboxes = document.querySelectorAll('.checklist-item');
-            const total = checkboxes.length;
-            const checked = document.querySelectorAll('.checklist-item:checked').length;
-            const percentage = total === 0 ? 0 : Math.round((checked / total) * 100);
-            
-            const progressBar = document.getElementById('progress-bar');
-            const progressText = document.getElementById('progress-text');
-            
-            if (!progressBar || !progressText) return; 
-            
-            progressBar.style.width = `${percentage}%`;
-            progressText.innerText = `${percentage}%`;
+        const textToSpeak = "Labbaikallahumma labbaik, labbaika laa syariika laka labbaik. Innal hamda wan ni'mata laka wal mulk. Laa syariika lak.";
+        utterance = new SpeechSynthesisUtterance(textToSpeak);
+        utterance.lang = 'id-ID'; 
+        utterance.rate = 0.8; 
 
-            if(percentage === 100 && total > 0) {
-                progressBar.classList.remove('from-gold-400', 'to-gold-600');
-                progressBar.classList.add('from-emerald-400', 'to-emerald-600');
-                progressText.classList.replace('text-emerald-600', 'text-white');
-                progressText.classList.replace('bg-emerald-50', 'bg-emerald-500');
-            } else {
-                progressBar.classList.add('from-gold-400', 'to-gold-600');
-                progressBar.classList.remove('from-emerald-400', 'to-emerald-600');
-                progressText.classList.replace('text-white', 'text-emerald-600');
-                progressText.classList.replace('bg-emerald-500', 'bg-emerald-50');
-            }
+        utterance.onend = () => {
+            isPlaying = false;
+            icon.className = 'fa-solid fa-play mr-2';
+            text.innerText = 'Dengarkan Audio Niat';
+            btn.classList.replace('bg-red-500', 'bg-indigo-600');
+            btn.classList.replace('hover:bg-red-600', 'hover:bg-indigo-700');
         };
 
-        // --- Simpan ke Cloud (Database) ---
-        window.saveProgressToCloud = function(id, isChecked) {
-            if (!userId) return;
-            userProgress[id] = isChecked;
-            const progressRef = doc(db, 'artifacts', appId, 'users', userId, 'progress', 'checkboxes');
-            // { merge: true } berfungsi untuk menggabungkan data, tidak menghapus yg sudah ada
-            setDoc(progressRef, { [id]: isChecked }, { merge: true }).catch(console.error);
-        };
+        window.speechSynthesis.speak(utterance);
+        isPlaying = true;
+        icon.className = 'fa-solid fa-stop mr-2';
+        text.innerText = 'Hentikan Audio';
+        btn.classList.replace('bg-indigo-600', 'bg-red-500');
+        btn.classList.replace('hover:bg-indigo-700', 'hover:bg-red-600');
+    };
 
-        window.saveLayoutToCloud = function() {
-            if (!userId) return;
-            const mainArea = document.getElementById('main-content-area');
-            const selectedAirline = document.getElementById('airline-selector')?.value || 'saudia';
-            
-            const layoutRef = doc(db, 'artifacts', appId, 'public', 'data', 'state', 'layout');
-            setDoc(layoutRef, {
-                html: mainArea.innerHTML,
-                airline: selectedAirline
-            }, { merge: true }).catch(console.error);
-        };
+    window.toggleTheme = function() {
+        document.documentElement.classList.toggle('dark');
+        const isDark = document.documentElement.classList.contains('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    };
 
-        // --- Logika Menambah Elemen (Sama seperti sebelumnya, tapi diekspor ke window) ---
-        window.addChecklistItem = function(containerId) {
-            const container = document.getElementById(containerId);
-            const newId = 'chk-' + Date.now();
-            const colorClass = containerId === 'grid-panas' ? 'amber' : 'emerald';
-            const html = `
-                <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-${colorClass}-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
-                    <button class="delete-item-btn absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                    <input type="checkbox" class="checklist-item hidden" id="${newId}">
-                    <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-${colorClass}-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
-                    <span class="text-sm font-medium text-slate-700 editable-text w-full" contenteditable="true">Item Baru</span>
-                </label>
-            `;
-            container.insertAdjacentHTML('beforeend', html);
-            window.updateProgress();
-        };
+    window.toggleEditMode = function() {
+        window.isEditMode = !window.isEditMode;
+        document.body.classList.toggle('edit-mode', window.isEditMode);
+        const btn = document.getElementById('edit-mode-btn');
+        const mainArea = document.getElementById('main-content-area');
 
-        window.addScheduleItem = function(containerId) {
-            const container = document.getElementById(containerId);
-            const html = `
-                <div class="group flex items-start p-4 bg-slate-50/50 rounded-2xl border border-slate-100 hover:border-emerald-200 hover:bg-emerald-50/50 hover:shadow-sm transition-all relative">
-                    <button class="delete-item-btn absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                    <span class="bg-white border border-emerald-100 text-emerald-700 font-bold text-xs px-3 py-1.5 rounded-lg mr-4 flex-shrink-0 mt-0.5 shadow-sm editable-text" contenteditable="true">00.00</span>
-                    <div class="text-sm font-semibold text-slate-700 mt-1 editable-text w-full" contenteditable="true">Acara Baru</div>
-                </div>
-            `;
-            container.insertAdjacentHTML('beforeend', html);
-        };
+        if(window.isEditMode) {
+            btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up mr-2"></i> Simpan ke Cloud';
+            btn.classList.replace('bg-gold-500', 'bg-blue-600');
+            btn.classList.replace('hover:bg-gold-600', 'hover:bg-blue-700');
+            document.getElementById('reset-layout-btn').classList.remove('hidden');
 
-        window.addStatusItem = function(containerId) {
-            const container = document.getElementById(containerId);
-            const html = `
-                <div class="flex items-start p-5 bg-emerald-50/50 rounded-2xl border border-emerald-100 relative pr-10 group hover:shadow-sm transition">
-                    <button class="delete-item-btn absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                    <div class="bg-white p-1.5 rounded-full shadow-sm mr-4 mt-0.5 flex-shrink-0">
-                        <i class="fa-solid fa-check text-emerald-600"></i>
-                    </div>
-                    <div class="editable-text text-emerald-900 font-medium pt-1 w-full" contenteditable="true">Informasi Status Baru</div>
-                </div>
-            `;
-            container.insertAdjacentHTML('beforeend', html);
-        };
+            document.querySelectorAll('.editable-text').forEach(el => el.setAttribute('contenteditable', 'true'));
 
-        window.addTextItem = function(containerId, iconClass) {
-            const container = document.getElementById(containerId);
-            const html = `
-                <li class="flex items-start relative pr-10 group bg-transparent hover:bg-slate-50 p-3 rounded-xl transition-colors -mx-3">
-                    <button class="delete-item-btn absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                    <i class="fa-solid ${iconClass} text-emerald-500 mt-1 mr-4 text-lg w-5 text-center"></i>
-                    <span class="text-sm sm:text-base text-slate-700 font-medium editable-text w-full" contenteditable="true">Informasi Tambahan Baru</span>
-                </li>
-            `;
-            container.insertAdjacentHTML('beforeend', html);
-        };
-
-        // --- Logika Audio Talbiyah ---
-        let isPlaying = false;
-        let utterance = null;
-        window.playTalbiyah = function() {
-            const btn = document.getElementById('play-talbiyah-btn');
-            const icon = document.getElementById('play-icon');
-            const text = document.getElementById('play-text');
-
-            if (isPlaying) {
-                window.speechSynthesis.cancel();
-                isPlaying = false;
-                icon.className = 'fa-solid fa-play mr-2';
-                text.innerText = 'Dengarkan Audio Niat';
-                btn.classList.replace('bg-red-500', 'bg-indigo-600');
-                btn.classList.replace('hover:bg-red-600', 'hover:bg-indigo-700');
-                return;
-            }
-
-            const textToSpeak = "Labbaikallahumma labbaik, labbaika laa syariika laka labbaik. Innal hamda wan ni'mata laka wal mulk. Laa syariika lak.";
-            utterance = new SpeechSynthesisUtterance(textToSpeak);
-            utterance.lang = 'id-ID'; 
-            utterance.rate = 0.8; 
-
-            utterance.onend = () => {
-                isPlaying = false;
-                icon.className = 'fa-solid fa-play mr-2';
-                text.innerText = 'Dengarkan Audio Niat';
-                btn.classList.replace('bg-red-500', 'bg-indigo-600');
-                btn.classList.replace('hover:bg-red-600', 'hover:bg-indigo-700');
-            };
-
-            window.speechSynthesis.speak(utterance);
-            isPlaying = true;
-            icon.className = 'fa-solid fa-stop mr-2';
-            text.innerText = 'Hentikan Audio';
-            btn.classList.replace('bg-indigo-600', 'bg-red-500');
-            btn.classList.replace('hover:bg-indigo-700', 'hover:bg-red-600');
-        };
-
-        // --- Logika Mode Edit & Animasi ---
-        window.toggleTheme = function() {
-            document.documentElement.classList.toggle('dark');
-            const isDark = document.documentElement.classList.contains('dark');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        };
-
-        window.toggleEditMode = function() {
-            window.isEditMode = !window.isEditMode;
-            document.body.classList.toggle('edit-mode', window.isEditMode);
-            const btn = document.getElementById('edit-mode-btn');
-            const mainArea = document.getElementById('main-content-area');
-
-            if(window.isEditMode) {
-                // Masuk Mode Edit
-                btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up mr-2"></i> Simpan ke Cloud';
-                btn.classList.replace('bg-gold-500', 'bg-blue-600');
-                btn.classList.replace('hover:bg-gold-600', 'hover:bg-blue-700');
-                document.getElementById('reset-layout-btn').classList.remove('hidden');
-
-                document.querySelectorAll('.editable-text').forEach(el => el.setAttribute('contenteditable', 'true'));
-
-                if(!window.sortableInstance) {
-                    window.sortableInstance = new Sortable(mainArea, {
-                        handle: '.drag-handle',
-                        animation: 150,
-                        ghostClass: 'opacity-50'
-                    });
-                } else {
-                    window.sortableInstance.option('disabled', false);
-                }
-            } else {
-                // Keluar & Simpan Mode Edit
-                btn.innerHTML = '<i class="fa-solid fa-pen mr-2"></i> Mode Edit';
-                btn.classList.replace('bg-blue-600', 'bg-gold-500');
-                btn.classList.replace('hover:bg-blue-700', 'hover:bg-gold-600');
-                document.getElementById('reset-layout-btn').classList.add('hidden');
-
-                document.querySelectorAll('.editable-text').forEach(el => el.removeAttribute('contenteditable'));
-                if(window.sortableInstance) window.sortableInstance.option('disabled', true);
-
-                // SIMPAN KE CLOUD DATABASE!
-                window.saveLayoutToCloud();
-                window.showModal('Tersimpan di Cloud', 'Semua perubahan telah berhasil diunggah! Jamaah yang sedang membuka link ini akan otomatis melihat versi terbarunya tanpa perlu me-refresh.', 'success');
-            }
-        };
-
-        window.showModal = function(title, message, type, onConfirm = null) {
-            const modal = document.getElementById('custom-modal');
-            const modalBackdrop = document.getElementById('modal-backdrop');
-            const modalContent = document.getElementById('modal-content');
-            
-            document.body.classList.add('modal-open');
-            document.getElementById('modal-title').textContent = title;
-            document.getElementById('modal-message').innerHTML = message;
-            
-            const iconContainer = document.getElementById('modal-icon-container');
-            const icon = document.getElementById('modal-icon');
-            const actions = document.getElementById('modal-actions');
-            actions.innerHTML = ''; 
-
-            if (type === 'success') {
-                iconContainer.className = 'flex items-center justify-center w-14 h-14 rounded-full mb-5 mx-auto bg-emerald-100 text-emerald-600';
-                icon.className = 'fa-solid fa-check text-2xl';
-                actions.innerHTML = `<button onclick="closeModal()" class="w-full px-6 py-2.5 rounded-xl text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition shadow-sm">OK, Mengerti</button>`;
-            } 
-            else if (type === 'confirm' || type === 'danger') {
-                const isDanger = type === 'danger';
-                iconContainer.className = isDanger ? 'flex items-center justify-center w-14 h-14 rounded-full mb-5 mx-auto bg-red-100 text-red-600' : 'flex items-center justify-center w-14 h-14 rounded-full mb-5 mx-auto bg-amber-100 text-amber-600';
-                icon.className = isDanger ? 'fa-solid fa-triangle-exclamation text-2xl' : 'fa-solid fa-circle-question text-2xl';
-                
-                const confirmBtnColor = isDanger ? 'bg-red-600 hover:bg-red-700' : 'bg-emerald-600 hover:bg-emerald-700';
-                
-                actions.innerHTML = `
-                    <button onclick="closeModal()" class="flex-1 px-4 py-2.5 rounded-xl text-sm font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition">Batal</button>
-                    <button id="modal-confirm-btn" class="flex-1 px-4 py-2.5 rounded-xl text-sm font-bold text-white ${confirmBtnColor} transition shadow-sm">Ya, Lanjutkan</button>
-                `;
-                
-                pendingAction = onConfirm;
-                document.getElementById('modal-confirm-btn').addEventListener('click', () => {
-                    if (pendingAction) pendingAction();
-                    window.closeModal();
+            if(!window.sortableInstance) {
+                window.sortableInstance = new Sortable(mainArea, {
+                    handle: '.drag-handle',
+                    animation: 150,
+                    ghostClass: 'opacity-50'
                 });
+            } else {
+                window.sortableInstance.option('disabled', false);
             }
+        } else {
+            btn.innerHTML = '<i class="fa-solid fa-pen mr-2"></i> Mode Edit';
+            btn.classList.replace('bg-blue-600', 'bg-gold-500');
+            btn.classList.replace('hover:bg-blue-700', 'hover:bg-gold-600');
+            document.getElementById('reset-layout-btn').classList.add('hidden');
 
-            modal.classList.remove('hidden');
-            void modal.offsetWidth; // Trigger reflow animasi
-            modalBackdrop.classList.remove('opacity-0');
-            modalContent.classList.remove('scale-95', 'opacity-0');
-        };
+            document.querySelectorAll('.editable-text').forEach(el => el.removeAttribute('contenteditable'));
+            if(window.sortableInstance) window.sortableInstance.option('disabled', true);
 
-        window.closeModal = function() {
-            const modal = document.getElementById('custom-modal');
-            const modalBackdrop = document.getElementById('modal-backdrop');
-            const modalContent = document.getElementById('modal-content');
+            window.saveLayoutToCloud();
+            window.showModal('Tersimpan di Cloud', 'Perubahan berhasil diunggah! Jamaah yang membuka link akan melihat versi terbaru secara otomatis.', 'success');
+        }
+    };
+
+    window.showModal = function(title, message, type, onConfirm = null) {
+        const modal = document.getElementById('custom-modal');
+        const modalBackdrop = document.getElementById('modal-backdrop');
+        const modalContent = document.getElementById('modal-content');
+        
+        document.body.classList.add('modal-open');
+        document.getElementById('modal-title').textContent = title;
+        document.getElementById('modal-message').innerHTML = message;
+        
+        const iconContainer = document.getElementById('modal-icon-container');
+        const icon = document.getElementById('modal-icon');
+        const actions = document.getElementById('modal-actions');
+        actions.innerHTML = ''; 
+
+        if (type === 'success') {
+            iconContainer.className = 'flex items-center justify-center w-14 h-14 rounded-full mb-5 mx-auto bg-emerald-100 text-emerald-600';
+            icon.className = 'fa-solid fa-check text-2xl';
+            actions.innerHTML = `<button onclick="closeModal()" class="w-full px-6 py-2.5 rounded-xl text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition shadow-sm">OK, Mengerti</button>`;
+        } 
+        else if (type === 'confirm' || type === 'danger') {
+            const isDanger = type === 'danger';
+            iconContainer.className = isDanger ? 'flex items-center justify-center w-14 h-14 rounded-full mb-5 mx-auto bg-red-100 text-red-600' : 'flex items-center justify-center w-14 h-14 rounded-full mb-5 mx-auto bg-amber-100 text-amber-600';
+            icon.className = isDanger ? 'fa-solid fa-triangle-exclamation text-2xl' : 'fa-solid fa-circle-question text-2xl';
             
-            modalBackdrop.classList.add('opacity-0');
-            modalContent.classList.add('scale-95', 'opacity-0');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                document.body.classList.remove('modal-open');
-                pendingAction = null;
-            }, 300);
-        };
-
-        // --- Logika Countdown (Hitung Mundur) ---
-        function initCountdown() {
-            const targetDate = new Date('2026-09-07T00:00:00').getTime();
+            const confirmBtnColor = isDanger ? 'bg-red-600 hover:bg-red-700' : 'bg-emerald-600 hover:bg-emerald-700';
             
-            const updateTimer = () => {
-                const now = new Date().getTime();
-                const distance = targetDate - now;
-
-                if (distance < 0) {
-                    const eDays = document.getElementById('cd-days');
-                    if(eDays) {
-                        eDays.innerText = "00";
-                        document.getElementById('cd-hours').innerText = "00";
-                        document.getElementById('cd-mins').innerText = "00";
-                    }
-                    return;
-                }
-
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-
-                const eDays = document.getElementById('cd-days');
-                const eHours = document.getElementById('cd-hours');
-                const eMins = document.getElementById('cd-mins');
-                
-                if(eDays) eDays.innerText = days.toString().padStart(2, '0');
-                if(eHours) eHours.innerText = hours.toString().padStart(2, '0');
-                if(eMins) eMins.innerText = minutes.toString().padStart(2, '0');
-            };
+            actions.innerHTML = `
+                <button onclick="closeModal()" class="flex-1 px-4 py-2.5 rounded-xl text-sm font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition">Batal</button>
+                <button id="modal-confirm-btn" class="flex-1 px-4 py-2.5 rounded-xl text-sm font-bold text-white ${confirmBtnColor} transition shadow-sm">Ya, Lanjutkan</button>
+            `;
             
-            updateTimer(); 
-            setInterval(updateTimer, 60000); 
+            pendingAction = onConfirm;
+            document.getElementById('modal-confirm-btn').addEventListener('click', () => {
+                if (pendingAction) pendingAction();
+                window.closeModal();
+            });
         }
 
-        // --- Eksekusi Saat Halaman Dimuat ---
-        document.addEventListener('DOMContentLoaded', () => {
-            
-            // 1. Inisialisasi Tema
-            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
+        modal.classList.remove('hidden');
+        void modal.offsetWidth; 
+        modalBackdrop.classList.remove('opacity-0');
+        modalContent.classList.remove('scale-95', 'opacity-0');
+    };
+
+    window.closeModal = function() {
+        const modal = document.getElementById('custom-modal');
+        const modalBackdrop = document.getElementById('modal-backdrop');
+        const modalContent = document.getElementById('modal-content');
+        
+        modalBackdrop.classList.add('opacity-0');
+        modalContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            document.body.classList.remove('modal-open');
+            pendingAction = null;
+        }, 300);
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+        
+        initCloud(); 
+
+        document.addEventListener('change', (e) => {
+            if(e.target.classList.contains('checklist-item')) {
+                window.saveProgressToCloud(e.target.id, e.target.checked);
+                window.updateProgress();
             }
-            
-            // 2. Mulai Hitung Mundur
-            initCountdown();
+        });
 
-            // 3. Menghubungkan ke Database Cloud!
-            initCloud();
+        document.addEventListener('click', (e) => {
+            if(window.isEditMode && e.target.classList.contains('editable-text')) {
+                // Biarkan browser menghandle klik text
+            }
+        });
 
-            // 4. Deteksi Klik Checklist untuk disimpan ke Cloud
-            document.addEventListener('change', (e) => {
-                if(e.target.classList.contains('checklist-item')) {
-                    window.saveProgressToCloud(e.target.id, e.target.checked);
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('.delete-item-btn');
+            if(btn && window.isEditMode) {
+                window.showModal('Hapus Item?', 'Yakin hapus dari daftar?', 'confirm', () => {
+                    const parent = btn.parentElement;
+                    parent.remove();
                     window.updateProgress();
-                }
-            });
-
-            // 5. Mencegah error default saat mengetik
-            document.addEventListener('click', (e) => {
-                if(window.isEditMode && e.target.classList.contains('editable-text')) {
-                    // Biarkan browser menghandle klik text
-                }
-            });
-
-            // 6. Tombol Hapus Item
-            document.addEventListener('click', (e) => {
-                const btn = e.target.closest('.delete-item-btn');
-                if(btn && window.isEditMode) {
-                    window.showModal('Hapus Item?', 'Apakah Anda yakin ingin menghapus item ini dari daftar? Tindakan ini tidak dapat dibatalkan jika Anda menyimpan perubahan ke Cloud.', 'confirm', () => {
-                        const parent = btn.parentElement;
-                        parent.remove();
-                        window.updateProgress();
-                    });
-                }
-            });
-
-            // 7. Tombol Reset Checklist
-            const resetBtn = document.getElementById('reset-btn');
-            if(resetBtn) {
-                resetBtn.addEventListener('click', () => {
-                    window.showModal('Reset Progress?', 'Apakah Anda yakin ingin mengosongkan semua checklist persiapan? Status akan kembali menjadi 0%.', 'confirm', () => {
-                        document.querySelectorAll('.checklist-item').forEach(cb => {
-                            cb.checked = false;
-                            // Menghapus data dari Cloud
-                            window.saveProgressToCloud(cb.id, false); 
-                        });
-                        window.updateProgress();
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                    });
-                });
-            }
-
-            // 8. Tombol Hapus Layout / Reset Default
-            const resetLayoutBtn = document.getElementById('reset-layout-btn');
-            if(resetLayoutBtn) {
-                resetLayoutBtn.addEventListener('click', () => {
-                    window.showModal(
-                        'Reset Tata Letak & Teks (Global)?', 
-                        '<strong class="text-red-600 block mb-2">PERINGATAN!</strong> Ini akan menghapus data yang tersimpan di Cloud dan mengembalikan seluruh susunan/teks ke keadaan awal pabrik bagi <strong class="text-slate-800">SELURUH JAMAAH</strong>.', 
-                        'danger', 
-                        async () => {
-                            if (userId) {
-                                // Menghapus dokumen layout utama dari Cloud
-                                const layoutRef = doc(db, 'artifacts', appId, 'public', 'data', 'state', 'layout');
-                                await deleteDoc(layoutRef);
-                                location.reload();
-                            }
-                        }
-                    );
                 });
             }
         });
-    </script>
-</body>
+
+        const resetBtn = document.getElementById('reset-btn');
+        if(resetBtn) {
+            resetBtn.addEventListener('click', () => {
+                window.showModal('Reset Progress?', 'Kosongkan semua checklist persiapan?', 'confirm', () => {
+                    document.querySelectorAll('.checklist-item').forEach(cb => {
+                        cb.checked = false;
+                        window.saveProgressToCloud(cb.id, false); 
+                    });
+                    window.updateProgress();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            });
+        }
+
+        const resetLayoutBtn = document.getElementById('reset-layout-btn');
+        if(resetLayoutBtn) {
+            resetLayoutBtn.addEventListener('click', () => {
+                window.showModal(
+                    'Reset Tata Letak & Teks?', 
+                    '<strong class="text-red-600 block mb-2">PERINGATAN!</strong> Menghapus data Cloud ke keadaan awal pabrik.', 
+                    'danger', 
+                    async () => {
+                        appData.html = "";
+                        pushToCloud();
+                        location.reload();
+                    }
+                );
+            });
+        }
+
+        // --- Script Auto-Refresh (Polling 5 Detik) ---
+        setInterval(async () => {
+            if (window.isEditMode) return;
+
+            try {
+                const response = await fetch(API_URL, {
+                    headers: { 'X-Master-Key': MASTER_KEY }
+                });
+                const result = await response.json();
+                
+                if (result.record) {
+                    const newData = result.record;
+                    const mainArea = document.getElementById('main-content-area');
+                    
+                    if (newData.html && mainArea.innerHTML !== newData.html) {
+                        mainArea.innerHTML = newData.html;
+                        appData.html = newData.html;
+                        applyProgress(); 
+                    }
+                    
+                    if (newData.airline && appData.airline !== newData.airline) {
+                        appData.airline = newData.airline;
+                        window.changeAirline(newData.airline, false);
+                        const sel = document.getElementById('airline-selector');
+                        if (sel) sel.value = newData.airline;
+                    }
+                }
+            } catch (err) {
+                console.error("Gagal melakukan auto-refresh:", err);
+            }
+        }, 5000); 
+    });
+</script>
 </html>
