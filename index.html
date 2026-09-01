@@ -141,10 +141,6 @@
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-emerald-500/20 blur-[100px] rounded-full pointer-events-none"></div>
 
         <div class="relative max-w-4xl mx-auto text-center z-10">
-            <div class="inline-flex items-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-5 py-2 text-sm font-medium text-emerald-50 mb-8 shadow-lg">
-                <i class="fa-solid fa-calendar-days mr-2 text-gold-500"></i> 
-                <span class="editable-text tracking-wide">7 - 15 September 2026</span>
-            </div>
             <h1 class="text-4xl md:text-6xl font-serif font-extrabold mb-6 leading-tight editable-text tracking-tight">
                 Materi Zoom Meet<br>
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-600 editable-text">Persiapan Umrah</span>
@@ -155,8 +151,10 @@
 
             <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto no-print">
                 <div class="bg-gradient-to-br from-gold-500/30 to-gold-600/30 backdrop-blur-md border border-gold-400/40 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg transform hover:scale-105 transition-transform relative">
-                    <span class="text-[10px] uppercase tracking-widest text-gold-200 font-bold mb-1">Hitung Mundur Keberangkatan</span>
-                    <span class="text-base font-black text-white mb-3 tracking-wide drop-shadow-md editable-text">07 September 2026</span>
+                    <span class="text-[10px] uppercase tracking-widest text-gold-200 font-bold mb-2">Pilih Tanggal & Waktu Keberangkatan</span>
+                    
+                    <!-- Date Input Sinkron Countdown -->
+                    <input type="datetime-local" id="departure-input" class="bg-black/20 border border-white/30 text-white rounded-lg px-4 py-2 outline-none font-bold text-sm mb-4 cursor-pointer hover:bg-black/30 transition w-[240px] text-center" style="color-scheme: dark;" onchange="updateCountdown(this.value, true)">
                     
                     <div class="flex gap-4 text-white">
                         <div class="text-center"><div class="text-2xl font-black leading-none" id="cd-days">--</div><div class="text-[10px] uppercase mt-1">Hari</div></div>
@@ -206,42 +204,42 @@
 
                 <div class="space-y-3" id="grid-manasik">
                     <div class="group flex items-start p-4 bg-slate-50/50 rounded-2xl border border-slate-100 hover:border-emerald-200 hover:bg-emerald-50/50 hover:shadow-sm transition-all relative">
-                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110 z-10"><i class="fa-solid fa-xmark text-sm"></i></button>
                         <span class="bg-white border border-emerald-100 text-emerald-700 font-bold text-xs px-3 py-1.5 rounded-lg mr-4 flex-shrink-0 mt-0.5 shadow-sm editable-text">07.30 – 08.00</span>
                         <div class="text-sm font-semibold text-slate-700 mt-1 editable-text">Registrasi Peserta</div>
                     </div>
                     <div class="group flex items-start p-4 bg-slate-50/50 rounded-2xl border border-slate-100 hover:border-emerald-200 hover:bg-emerald-50/50 hover:shadow-sm transition-all relative">
-                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110 z-10"><i class="fa-solid fa-xmark text-sm"></i></button>
                         <span class="bg-white border border-emerald-100 text-emerald-700 font-bold text-xs px-3 py-1.5 rounded-lg mr-4 flex-shrink-0 mt-0.5 shadow-sm editable-text">08.00 – 10.00</span>
                         <div class="text-sm font-semibold text-slate-700 mt-1 editable-text">Materi Filosofi Haji dan Umrah</div>
                     </div>
                     <div class="group flex items-start p-4 bg-amber-50/30 rounded-2xl border border-amber-100 hover:border-amber-200 hover:bg-amber-50 hover:shadow-sm transition-all relative">
-                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110 z-10"><i class="fa-solid fa-xmark text-sm"></i></button>
                         <span class="bg-amber-100 text-amber-800 font-bold text-xs px-3 py-1.5 rounded-lg mr-4 flex-shrink-0 mt-0.5 shadow-sm editable-text">10.00 – 10.15</span>
                         <div class="text-sm font-semibold text-amber-900 mt-1 editable-text">Coffee Break (1)</div>
                     </div>
                     <div class="group flex items-start p-4 bg-slate-50/50 rounded-2xl border border-slate-100 hover:border-emerald-200 hover:bg-emerald-50/50 hover:shadow-sm transition-all relative">
-                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110 z-10"><i class="fa-solid fa-xmark text-sm"></i></button>
                         <span class="bg-white border border-emerald-100 text-emerald-700 font-bold text-xs px-3 py-1.5 rounded-lg mr-4 flex-shrink-0 mt-0.5 shadow-sm editable-text">10.15 – 12.00</span>
                         <div class="text-sm font-semibold text-slate-700 mt-1 editable-text">Manfaat Haji dan Umrah dalam Kehidupan</div>
                     </div>
                     <div class="group flex items-start p-4 bg-emerald-600 rounded-2xl border border-emerald-700 shadow-md relative hover:shadow-lg transition-all">
-                        <button class="delete-item-btn hidden absolute right-3 top-3 text-white hover:text-red-200 bg-white/20 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-white hover:text-red-200 bg-white/20 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110 z-10"><i class="fa-solid fa-xmark text-sm"></i></button>
                         <span class="bg-white/20 text-white border border-white/20 font-bold text-xs px-3 py-1.5 rounded-lg mr-4 flex-shrink-0 mt-0.5 editable-text">12.00 – 13.00</span>
                         <div class="text-sm font-bold text-white mt-1 editable-text">ISOMA (Istirahat, Sholat, dan Makan)</div>
                     </div>
                     <div class="group flex items-start p-4 bg-slate-50/50 rounded-2xl border border-slate-100 hover:border-emerald-200 hover:bg-emerald-50/50 hover:shadow-sm transition-all relative">
-                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110 z-10"><i class="fa-solid fa-xmark text-sm"></i></button>
                         <span class="bg-white border border-emerald-100 text-emerald-700 font-bold text-xs px-3 py-1.5 rounded-lg mr-4 flex-shrink-0 mt-0.5 shadow-sm editable-text">13.00 – 15.30</span>
                         <div class="text-sm font-semibold text-slate-700 mt-1 editable-text">Fiqih Manasik Haji dan Umrah</div>
                     </div>
                     <div class="group flex items-start p-4 bg-amber-50/30 rounded-2xl border border-amber-100 hover:border-amber-200 hover:bg-amber-50 hover:shadow-sm transition-all relative">
-                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110 z-10"><i class="fa-solid fa-xmark text-sm"></i></button>
                         <span class="bg-amber-100 text-amber-800 font-bold text-xs px-3 py-1.5 rounded-lg mr-4 flex-shrink-0 mt-0.5 shadow-sm editable-text">15.30 – 15.45</span>
                         <div class="text-sm font-semibold text-amber-900 mt-1 editable-text">Coffee Break (2)</div>
                     </div>
                     <div class="group flex items-start p-4 bg-slate-50/50 rounded-2xl border border-slate-100 hover:border-emerald-200 hover:bg-emerald-50/50 hover:shadow-sm transition-all relative">
-                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110 z-10"><i class="fa-solid fa-xmark text-sm"></i></button>
                         <span class="bg-white border border-emerald-100 text-emerald-700 font-bold text-xs px-3 py-1.5 rounded-lg mr-4 flex-shrink-0 mt-0.5 shadow-sm editable-text">15.45 – 17.00</span>
                         <div class="text-sm font-semibold text-slate-700 mt-1 editable-text">Teknis Perjalanan dan Sesi Tanya Jawab</div>
                     </div>
@@ -253,7 +251,7 @@
 
                 <div class="mt-8 pt-6 border-t border-gray-100">
                     <label class="check-container flex items-center cursor-pointer group p-3 -mx-3 rounded-xl hover:bg-emerald-50 transition-colors">
-                        <input type="checkbox" class="checklist-item sr-only" id="read-manasik-schedule">
+                        <input type="checkbox" class="checklist-item absolute opacity-0 w-0 h-0" id="read-manasik-schedule">
                         <div class="w-7 h-7 rounded-lg border-2 border-gray-300 flex items-center justify-center mr-4 group-hover:border-emerald-500 transition-colors bg-white">
                             <svg class="w-4 h-4 text-white hidden pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                         </div>
@@ -318,7 +316,7 @@
 
                 <div class="mt-8 pt-6 border-t border-gray-100">
                     <label class="check-container flex items-center cursor-pointer group p-3 -mx-3 rounded-xl hover:bg-emerald-50 transition-colors">
-                        <input type="checkbox" class="checklist-item sr-only" id="read-data-jamaah">
+                        <input type="checkbox" class="checklist-item absolute opacity-0 w-0 h-0" id="read-data-jamaah">
                         <div class="w-7 h-7 rounded-lg border-2 border-gray-300 flex items-center justify-center mr-4 group-hover:border-emerald-500 transition-colors bg-white">
                             <svg class="w-4 h-4 text-white hidden pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                         </div>
@@ -340,21 +338,21 @@
             <div class="p-6 sm:p-8">
                 <div class="space-y-4" id="grid-status">
                     <div class="flex items-start p-5 bg-emerald-50/50 rounded-2xl border border-emerald-100 relative pr-10 group hover:shadow-sm transition">
-                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110 z-10"><i class="fa-solid fa-xmark text-sm"></i></button>
                         <div class="bg-white p-1.5 rounded-full shadow-sm mr-4 mt-0.5">
                             <i class="fa-solid fa-check text-emerald-600"></i>
                         </div>
                         <div class="editable-text text-emerald-900 font-medium pt-1">VISA UMRAH seluruh jamaah telah terbit.</div>
                     </div>
                     <div class="flex items-start p-5 bg-emerald-50/50 rounded-2xl border border-emerald-100 relative pr-10 group hover:shadow-sm transition">
-                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110 z-10"><i class="fa-solid fa-xmark text-sm"></i></button>
                         <div class="bg-white p-1.5 rounded-full shadow-sm mr-4 mt-0.5">
                             <i class="fa-solid fa-check text-emerald-600"></i>
                         </div>
                         <div class="editable-text text-emerald-900 font-medium pt-1">Seluruh jamaah terdaftar asuransi ASKRIDA SYARIAH.</div>
                     </div>
                     <div class="flex items-start p-5 bg-emerald-50/50 rounded-2xl border border-emerald-100 relative pr-10 group hover:shadow-sm transition">
-                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110 z-10"><i class="fa-solid fa-xmark text-sm"></i></button>
                         <div class="bg-white p-1.5 rounded-full shadow-sm mr-4 mt-0.5 flex-shrink-0">
                             <i class="fa-solid fa-hotel text-emerald-600 text-xs"></i>
                         </div>
@@ -381,7 +379,7 @@
 
                 <div class="mt-8 pt-6 border-t border-gray-100">
                     <label class="check-container flex items-center cursor-pointer group p-3 -mx-3 rounded-xl hover:bg-emerald-50 transition-colors">
-                        <input type="checkbox" class="checklist-item sr-only" id="read-status">
+                        <input type="checkbox" class="checklist-item absolute opacity-0 w-0 h-0" id="read-status">
                         <div class="w-7 h-7 rounded-lg border-2 border-gray-300 flex items-center justify-center mr-4 group-hover:border-emerald-500 transition-colors bg-white">
                             <svg class="w-4 h-4 text-white hidden pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                         </div>
@@ -478,7 +476,7 @@
 
                 <div class="mt-8 pt-6 border-t border-gray-200">
                     <label class="check-container flex items-center cursor-pointer group p-3 -mx-3 rounded-xl hover:bg-emerald-50 transition-colors">
-                        <input type="checkbox" class="checklist-item sr-only" id="read-flight">
+                        <input type="checkbox" class="checklist-item absolute opacity-0 w-0 h-0" id="read-flight">
                         <div class="w-7 h-7 rounded-lg border-2 border-gray-300 flex items-center justify-center mr-4 group-hover:border-emerald-500 transition-colors bg-white">
                             <svg class="w-4 h-4 text-white hidden pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                         </div>
@@ -501,7 +499,7 @@
                 <div class="grid md:grid-cols-2 gap-4 sm:gap-6">
                     <label class="check-container block bg-white border-2 border-slate-100 p-5 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition relative group">
                         <div class="flex items-start">
-                            <input type="checkbox" class="checklist-item sr-only" id="chk-med-check">
+                            <input type="checkbox" class="checklist-item absolute opacity-0 w-0 h-0" id="chk-med-check">
                             <div class="w-7 h-7 rounded-lg border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-500 transition-colors">
                                 <svg class="w-4 h-4 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                             </div>
@@ -514,7 +512,7 @@
 
                     <label class="check-container block bg-red-50/50 border-2 border-red-100 p-5 rounded-2xl cursor-pointer hover:border-red-300 hover:shadow-md transition relative group">
                         <div class="flex items-start">
-                            <input type="checkbox" class="checklist-item sr-only" id="chk-vaksin">
+                            <input type="checkbox" class="checklist-item absolute opacity-0 w-0 h-0" id="chk-vaksin">
                             <div class="w-7 h-7 rounded-lg border-2 border-red-200 bg-white flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-red-400 transition-colors">
                                 <svg class="w-4 h-4 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                             </div>
@@ -553,37 +551,37 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="grid-pribadi">
                         <label class="check-container group flex items-start p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item sr-only" id="pack-obat">
+                            <input type="checkbox" class="checklist-item absolute opacity-0 w-0 h-0" id="pack-obat">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 mt-0.5 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text leading-relaxed">Obat Pribadi (darah tinggi, gula, asam urat, dsb.) <strong class="text-red-500">WAJIB</strong></span>
                         </label>
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item sr-only" id="pack-vitamin">
+                            <input type="checkbox" class="checklist-item absolute opacity-0 w-0 h-0" id="pack-vitamin">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Vitamin & Suplemen</span>
                         </label>
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item sr-only" id="pack-masker">
+                            <input type="checkbox" class="checklist-item absolute opacity-0 w-0 h-0" id="pack-masker">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Masker & Hand Sanitizer</span>
                         </label>
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item sr-only" id="pack-tisu">
+                            <input type="checkbox" class="checklist-item absolute opacity-0 w-0 h-0" id="pack-tisu">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Tisu Kering & Basah</span>
                         </label>
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item sr-only" id="pack-mandi">
+                            <input type="checkbox" class="checklist-item absolute opacity-0 w-0 h-0" id="pack-mandi">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Alat Mandi Pribadi</span>
                         </label>
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item sr-only" id="pack-powerbank">
+                            <input type="checkbox" class="checklist-item absolute opacity-0 w-0 h-0" id="pack-powerbank">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Power Bank & Charger</span>
                         </label>
@@ -602,31 +600,31 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="grid-panas">
                         <label class="check-container group flex items-start p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-amber-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item sr-only" id="panas-baju">
+                            <input type="checkbox" class="checklist-item absolute opacity-0 w-0 h-0" id="panas-baju">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 mt-0.5 flex-shrink-0 group-hover:border-amber-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text leading-relaxed">Baju muslim adem, longgar & menyerap keringat</span>
                         </label>
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-amber-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item sr-only" id="panas-topi">
+                            <input type="checkbox" class="checklist-item absolute opacity-0 w-0 h-0" id="panas-topi">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-amber-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Topi / Payung Kecil</span>
                         </label>
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-amber-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item sr-only" id="panas-sunblock">
+                            <input type="checkbox" class="checklist-item absolute opacity-0 w-0 h-0" id="panas-sunblock">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-amber-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Sunscreen / Sunblock & Pelembap</span>
                         </label>
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-amber-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item sr-only" id="panas-kacamatag">
+                            <input type="checkbox" class="checklist-item absolute opacity-0 w-0 h-0" id="panas-kacamatag">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-amber-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Kacamata Hitam (Opsional)</span>
                         </label>
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-amber-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item sr-only" id="panas-botol">
+                            <input type="checkbox" class="checklist-item absolute opacity-0 w-0 h-0" id="panas-botol">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-amber-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Botol Minum Pribadi / Tumbler</span>
                         </label>
@@ -645,25 +643,25 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="grid-ibadah">
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item sr-only" id="ibadah-ihram">
+                            <input type="checkbox" class="checklist-item absolute opacity-0 w-0 h-0" id="ibadah-ihram">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Kain Ihram / Sabuk Ihram (Ikhwan)</span>
                         </label>
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item sr-only" id="ibadah-mukena">
+                            <input type="checkbox" class="checklist-item absolute opacity-0 w-0 h-0" id="ibadah-mukena">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Mukena (Akhwat)</span>
                         </label>
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item sr-only" id="ibadah-sandal">
+                            <input type="checkbox" class="checklist-item absolute opacity-0 w-0 h-0" id="ibadah-sandal">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Sandal Umrah & Tas Sandal</span>
                         </label>
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item sr-only" id="ibadah-buku">
+                            <input type="checkbox" class="checklist-item absolute opacity-0 w-0 h-0" id="ibadah-buku">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Al-Qur’an Kecil / Buku Doa</span>
                         </label>
@@ -687,17 +685,17 @@
             <div class="p-6 sm:p-8">
                 <ul class="grid sm:grid-cols-2 gap-4 mb-8" id="grid-pesawat">
                     <li class="flex items-start bg-slate-50 p-4 rounded-2xl border border-slate-100 relative pr-10 group hover:shadow-sm transition">
-                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110 z-10"><i class="fa-solid fa-xmark text-sm"></i></button>
                         <div class="bg-white p-2 rounded-full shadow-sm mr-4 shrink-0 mt-0.5"><i class="fa-solid fa-ban text-red-500"></i></div>
                         <span class="text-sm text-slate-700 font-medium leading-relaxed editable-text">Cairan maksimal 100 ML (sabun, parfum, lotion) untuk tas kabin.</span>
                     </li>
                     <li class="flex items-start bg-slate-50 p-4 rounded-2xl border border-slate-100 relative pr-10 group hover:shadow-sm transition">
-                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110 z-10"><i class="fa-solid fa-xmark text-sm"></i></button>
                         <div class="bg-white p-2 rounded-full shadow-sm mr-4 shrink-0 mt-0.5"><i class="fa-solid fa-scissors text-gray-500"></i></div>
                         <span class="text-sm text-slate-700 font-medium leading-relaxed editable-text">Benda tajam (gunting, silet) WAJIB masuk koper bagasi.</span>
                     </li>
                     <li class="flex items-start bg-slate-50 p-4 rounded-2xl border border-slate-100 relative pr-10 group hover:shadow-sm transition">
-                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110 z-10"><i class="fa-solid fa-xmark text-sm"></i></button>
                         <div class="bg-white p-2 rounded-full shadow-sm mr-4 shrink-0 mt-0.5"><i class="fa-solid fa-battery-full text-emerald-500"></i></div>
                         <span class="text-sm text-slate-700 font-medium leading-relaxed editable-text">Power bank WAJIB di tas kabin (TIDAK BOLEH DI BAGASI).</span>
                     </li>
@@ -709,7 +707,7 @@
 
                 <div class="border-t border-gray-100 pt-6">
                     <label class="check-container flex items-center cursor-pointer group p-3 -mx-3 rounded-xl hover:bg-amber-50 transition-colors">
-                        <input type="checkbox" class="checklist-item sr-only" id="read-pesawat">
+                        <input type="checkbox" class="checklist-item absolute opacity-0 w-0 h-0" id="read-pesawat">
                         <div class="w-7 h-7 rounded-lg border-2 border-gray-300 flex items-center justify-center mr-4 group-hover:border-amber-500 transition-colors bg-white">
                             <svg class="w-4 h-4 text-white hidden pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                         </div>
@@ -732,22 +730,22 @@
             <div class="p-6 sm:p-8">
                 <ul class="space-y-4 mb-8" id="grid-info">
                     <li class="flex items-start relative pr-10 group bg-transparent hover:bg-slate-50 p-3 rounded-xl transition-colors -mx-3">
-                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110 z-10"><i class="fa-solid fa-xmark text-sm"></i></button>
                         <i class="fa-solid fa-wifi text-emerald-500 mt-1 mr-4 text-lg w-5 text-center"></i>
                         <span class="text-sm sm:text-base text-slate-700 font-medium editable-text w-full">Paket Internet & Hotel Manasik: Hubungi Tim Samawi Travel.</span>
                     </li>
                     <li class="flex items-start relative pr-10 group bg-transparent hover:bg-slate-50 p-3 rounded-xl transition-colors -mx-3">
-                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110 z-10"><i class="fa-solid fa-xmark text-sm"></i></button>
                         <i class="fa-solid fa-mobile-screen text-amber-500 mt-1 mr-4 text-lg w-5 text-center"></i>
                         <span class="text-sm sm:text-base text-slate-700 font-medium editable-text w-full">Seluruh jamaah diwajibkan membuat akun Nusuk secara mandiri untuk permit Raudhah.</span>
                     </li>
                     <li class="flex items-start relative pr-10 group bg-transparent hover:bg-slate-50 p-3 rounded-xl transition-colors -mx-3">
-                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110 z-10"><i class="fa-solid fa-xmark text-sm"></i></button>
                         <i class="fa-solid fa-wallet text-emerald-500 mt-1 mr-4 text-lg w-5 text-center"></i>
                         <span class="text-sm sm:text-base text-slate-700 font-medium editable-text w-full">Biaya Over Bagasi & Transport Lokal di luar program ditanggung masing-masing jamaah.</span>
                     </li>
                     <li class="flex items-start relative pr-10 group bg-transparent hover:bg-slate-50 p-3 rounded-xl transition-colors -mx-3">
-                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110 z-10"><i class="fa-solid fa-xmark text-sm"></i></button>
                         <i class="fa-solid fa-users text-emerald-500 mt-1 mr-4 text-lg w-5 text-center"></i>
                         <span class="text-sm sm:text-base text-slate-700 font-medium editable-text w-full">Bagi yang mengajak keluarga saat manasik mohon konfirmasi sebelumnya.</span>
                     </li>
@@ -759,7 +757,7 @@
 
                 <div class="border-t border-gray-100 pt-6">
                     <label class="check-container flex items-center cursor-pointer group p-3 -mx-3 rounded-xl hover:bg-emerald-50 transition-colors">
-                        <input type="checkbox" class="checklist-item sr-only" id="read-tambahan">
+                        <input type="checkbox" class="checklist-item absolute opacity-0 w-0 h-0" id="read-tambahan">
                         <div class="w-7 h-7 rounded-lg border-2 border-gray-300 flex items-center justify-center mr-4 group-hover:border-emerald-500 transition-colors bg-white">
                             <svg class="w-4 h-4 text-white hidden pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                         </div>
@@ -812,10 +810,12 @@
     const MASTER_KEY = '$2a$10$ns1OSogNiANZAJ/k6optMe3/GND7i84vrBQY7zzm.l12JR0mNdD5u';
     const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-    let appData = { html: "", airline: "saudia", progress: {} };
+    // App state
+    let appData = { html: "", airline: "saudia", progress: {}, departureDate: "2026-09-07T15:50" };
     window.isEditMode = false;
     window.sortableInstance = null;
     let userProgress = {}; 
+    let timerInterval = null;
 
     async function initCloud() {
         try {
@@ -833,11 +833,19 @@
                     const sel = document.getElementById('airline-selector');
                     if (sel) sel.value = appData.airline;
                 }
+                
+                // Initialize Date & Countdown
+                const savedDate = appData.departureDate || "2026-09-07T15:50";
+                const dateInput = document.getElementById('departure-input');
+                if (dateInput) dateInput.value = savedDate;
+                window.updateCountdown(savedDate, false);
+
                 userProgress = appData.progress || {};
                 applyProgress();
             }
         } catch (err) {
             console.error("Gagal memuat data dari JSONBin:", err);
+            window.updateCountdown("2026-09-07T15:50", false);
         }
     }
 
@@ -859,8 +867,12 @@
     window.saveLayoutToCloud = function() {
         const mainArea = document.getElementById('main-content-area');
         const selectedAirline = document.getElementById('airline-selector')?.value || 'saudia';
+        const departureInput = document.getElementById('departure-input')?.value;
+        
         appData.html = mainArea.innerHTML;
         appData.airline = selectedAirline;
+        if(departureInput) appData.departureDate = departureInput;
+        
         pushToCloud();
     };
 
@@ -929,7 +941,7 @@
         const html = `
             <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-${colorClass}-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                 <button class="delete-item-btn absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                <input type="checkbox" class="checklist-item sr-only" id="${newId}">
+                <input type="checkbox" class="checklist-item absolute opacity-0 w-0 h-0" id="${newId}">
                 <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-${colorClass}-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                 <span class="text-sm font-medium text-slate-700 editable-text w-full" contenteditable="true">Item Baru</span>
             </label>
@@ -942,7 +954,7 @@
         const container = document.getElementById(containerId);
         const html = `
             <div class="group flex items-start p-4 bg-slate-50/50 rounded-2xl border border-slate-100 hover:border-emerald-200 hover:bg-emerald-50/50 hover:shadow-sm transition-all relative">
-                <button class="delete-item-btn absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                <button class="delete-item-btn absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110 z-10"><i class="fa-solid fa-xmark text-sm"></i></button>
                 <span class="bg-white border border-emerald-100 text-emerald-700 font-bold text-xs px-3 py-1.5 rounded-lg mr-4 flex-shrink-0 mt-0.5 shadow-sm editable-text" contenteditable="true">00.00</span>
                 <div class="text-sm font-semibold text-slate-700 mt-1 editable-text w-full" contenteditable="true">Acara Baru</div>
             </div>
@@ -954,7 +966,7 @@
         const container = document.getElementById(containerId);
         const html = `
             <div class="flex items-start p-5 bg-emerald-50/50 rounded-2xl border border-emerald-100 relative pr-10 group hover:shadow-sm transition">
-                <button class="delete-item-btn absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                <button class="delete-item-btn absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110 z-10"><i class="fa-solid fa-xmark text-sm"></i></button>
                 <div class="bg-white p-1.5 rounded-full shadow-sm mr-4 mt-0.5 flex-shrink-0">
                     <i class="fa-solid fa-check text-emerald-600"></i>
                 </div>
@@ -968,7 +980,7 @@
         const container = document.getElementById(containerId);
         const html = `
             <li class="flex items-start relative pr-10 group bg-transparent hover:bg-slate-50 p-3 rounded-xl transition-colors -mx-3">
-                <button class="delete-item-btn absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                <button class="delete-item-btn absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110 z-10"><i class="fa-solid fa-xmark text-sm"></i></button>
                 <i class="fa-solid ${iconClass} text-emerald-500 mt-1 mr-4 text-lg w-5 text-center"></i>
                 <span class="text-sm sm:text-base text-slate-700 font-medium editable-text w-full" contenteditable="true">Informasi Tambahan Baru</span>
             </li>
@@ -1076,21 +1088,33 @@
         }, 300);
     };
 
-    window.initCountdown = function() {
-        const countDownDate = new Date("September 7, 2026 15:50:00").getTime();
-        const timerInterval = setInterval(function() {
+    window.updateCountdown = function(newDateStr, triggerSave = false) {
+        if (newDateStr) {
+            appData.departureDate = newDateStr;
+            if (triggerSave && window.isEditMode) {
+                window.saveLayoutToCloud();
+            }
+        }
+        
+        const targetDate = new Date(appData.departureDate || "2026-09-07T15:50").getTime();
+        clearInterval(timerInterval);
+
+        timerInterval = setInterval(function() {
             const now = new Date().getTime();
-            const distance = countDownDate - now;
-            if (distance < 0) {
-                clearInterval(timerInterval);
+            const distance = targetDate - now;
+
+            if (distance < 0 || isNaN(distance)) {
                 document.getElementById("cd-days").innerText = "00";
                 document.getElementById("cd-hours").innerText = "00";
                 document.getElementById("cd-mins").innerText = "00";
+                clearInterval(timerInterval);
                 return;
             }
+
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
             document.getElementById("cd-days").innerText = days.toString().padStart(2, '0');
             document.getElementById("cd-hours").innerText = hours.toString().padStart(2, '0');
             document.getElementById("cd-mins").innerText = minutes.toString().padStart(2, '0');
@@ -1103,7 +1127,6 @@
         }
 
         initCloud(); 
-        initCountdown();
 
         document.addEventListener('change', (e) => {
             if(e.target.classList.contains('checklist-item')) {
@@ -1115,6 +1138,9 @@
         document.addEventListener('click', (e) => {
             const btn = e.target.closest('.delete-item-btn');
             if(btn && window.isEditMode) {
+                // Prevent clicking delete from triggering the checkbox
+                e.preventDefault();
+                e.stopPropagation();
                 window.showModal('Hapus Item?', 'Yakin hapus dari daftar?', 'confirm', () => {
                     const parent = btn.parentElement;
                     parent.remove();
