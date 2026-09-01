@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materi Zoom Meet - Keberangkatan Umrah</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        emerald: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#022c22', 
+                        },
+                        gold: {
+                            400: '#e5c158',
+                            500: '#d4af37',
+                            600: '#b5952f',
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(0,0,0,0.05)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom Checkbox Styling & Animations */
+        .check-container input:checked + div {
+            background-color: #059669;
+            border-color: #059669;
+            transform: scale(1.05);
+        }
+        .check-container input:checked + div svg {
+            display: block;
+        }
+        .check-container:active div {
+            transform: scale(0.95);
+        }
+        html { scroll-behavior: smooth; background-color: #f8fafc; }
+        
+        /* Edit Mode Styles */
+        body.edit-mode .editable-text {
+            border-bottom: 2px dashed #059669;
+            min-width: 20px;
+            display: inline-block;
+            outline: none;
+            background-color: rgba(5, 150, 105, 0.05);
+            border-radius: 4px;
+            padding: 2px 6px;
+            transition: all 0.2s;
+        }
+        body.edit-mode .editable-text:focus {
+            background-color: rgba(5, 150, 105, 0.15);
+            border-bottom-style: solid;
+        }
+        body.edit-mode .drag-handle { display: inline-block !important; }
+        body.edit-mode .add-item-btn,
+        body.edit-mode .delete-item-btn { display: flex !important; }
+        
+        /* Prevent interaction with checkboxes while in edit mode to avoid accidental triggers */
+        body.edit-mode .check-container { pointer-events: none; }
+        body.edit-mode .editable-text,
+        body.edit-mode .delete-item-btn,
+        body.edit-mode .add-item-btn { pointer-events: auto; }
+
+        /* Airline Selector Edit Mode */
+        body.edit-mode #airline-selector { display: block !important; }
+        body.edit-mode #airline-edit-badge { display: flex !important; }
+
+        /* Modal Transitions */
+        .modal-open { overflow: hidden; }
+
+        /* 🖨️ Cetak / Print Styles */
+        @media print {
+            body { background: white !important; color: black !important; padding-bottom: 0 !important; }
+            .fixed, #edit-mode-btn, #theme-toggle-btn, .no-print, .add-item-btn, .delete-item-btn { display: none !important; }
+            section { break-inside: avoid; box-shadow: none !important; border: 1.5px solid #e2e8f0 !important; margin-bottom: 24px !important; }
+            .bg-gradient-to-r, .bg-slate-800 { background: #f8fafc !important; color: #0f172a !important; border-bottom: 1.5px solid #e2e8f0; -webkit-print-color-adjust: exact; }
+            header { padding: 40px 0 20px 0 !important; background: none !important; }
+            h1, h2, p, .text-white { color: #0f172a !important; }
+            .text-transparent { color: #0f172a !important; background: none !important; -webkit-text-fill-color: #0f172a !important; }
+            .check-container { border: 1px solid #e2e8f0 !important; page-break-inside: avoid; }
+        }
+
+        /* 🌙 Dark Mode Overrides */
+        html.dark { background-color: #0f172a; }
+        .dark body { background-color: #0f172a; color: #f1f5f9; }
+        .dark section, .dark .bg-white { background-color: #1e293b !important; border-color: #334155 !important; }
+        .dark .bg-slate-50 { background-color: #0f172a !important; border-color: #334155 !important; }
+        .dark .text-slate-800, .dark .text-slate-700 { color: #f8fafc !important; }
+        .dark .text-gray-700, .dark .text-gray-500, .dark .text-slate-500 { color: #94a3b8 !important; }
+        .dark .border-gray-100, .dark .border-gray-200 { border-color: #334155 !important; }
+        .dark .bg-emerald-50, .dark .bg-emerald-50\/50 { background-color: rgba(16, 185, 129, 0.1) !important; border-color: rgba(16, 185, 129, 0.2) !important; }
+        .dark .bg-amber-50, .dark .bg-amber-50\/30 { background-color: rgba(245, 158, 11, 0.1) !important; border-color: rgba(245, 158, 11, 0.2) !important; }
+        .dark .bg-red-50, .dark .bg-red-50\/50 { background-color: rgba(239, 68, 68, 0.1) !important; border-color: rgba(239, 68, 68, 0.2) !important; }
+        .dark .text-emerald-900, .dark .text-emerald-700 { color: #6ee7b7 !important; }
+        .dark .text-amber-900, .dark .text-amber-800, .dark .text-amber-700 { color: #fcd34d !important; }
+        .dark #modal-content { background-color: #1e293b; border: 1px solid #334155; }
+        .dark #modal-title { color: white; }
+        .dark #modal-message { color: #cbd5e1; }
+    </style>
+</head>
+<body class="text-slate-800 antialiased pb-24 font-sans selection:bg-gold-500 selection:text-white transition-colors duration-300">
+
+    <!-- Sticky Progress Bar (Glassmorphism Effect) -->
+    <div class="fixed top-0 left-0 w-full z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-gray-100 dark:border-slate-800 shadow-sm transition-all no-print">
+        <div class="px-4 py-3 flex justify-between items-center max-w-4xl mx-auto">
+            <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                <i class="fa-solid fa-list-check text-emerald-600 dark:text-emerald-500"></i> Persiapan Anda
+            </span>
+            <span id="progress-text" class="text-sm font-black text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/50 px-3 py-1 rounded-full border border-emerald-100 dark:border-emerald-800">0%</span>
+        </div>
+        <div class="w-full bg-gray-100 dark:bg-slate-800 h-1.5">
+            <div id="progress-bar" class="bg-gradient-to-r from-gold-400 to-gold-600 h-1.5 transition-all duration-700 ease-out" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="relative bg-gradient-to-br from-emerald-900 via-emerald-800 to-emerald-900 text-white pt-32 pb-28 px-4 overflow-hidden">
+        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#d4af37 1px, transparent 1px); background-size: 30px 30px;"></div>
+        <!-- Decorative Glow -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-emerald-500/20 blur-[100px] rounded-full pointer-events-none"></div>
+        
+        <div class="relative max-w-4xl mx-auto text-center z-10">
+            <div class="inline-flex items-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-5 py-2 text-sm font-medium text-emerald-50 mb-8 shadow-lg">
+                <i class="fa-solid fa-calendar-days mr-2 text-gold-500"></i> 
+                <span class="editable-text tracking-wide">7 - 15 September 2026</span>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-serif font-extrabold mb-6 leading-tight editable-text tracking-tight">
+                Materi Zoom Meet<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-600 editable-text">Persiapan Umrah</span>
+            </h1>
+            <p class="text-emerald-100/90 text-sm md:text-lg max-w-2xl mx-auto mb-4 editable-text leading-relaxed font-light">
+                Halaman ini berisi ringkasan seluruh informasi penting dari sesi Zoom. Silakan baca dengan seksama dan gunakan fitur checklist untuk memastikan tidak ada yang terlewat.
+            </p>
+
+            <!-- ⏱️ Fitur Countdown & 🌤️ Widget Info (Cuaca) -->
+            <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto no-print">
+                
+                <div class="bg-gradient-to-br from-gold-500/30 to-gold-600/30 backdrop-blur-md border border-gold-400/40 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg transform hover:scale-105 transition-transform">
+                    <span class="text-[10px] uppercase tracking-widest text-gold-200 font-bold mb-2">Hitung Mundur Keberangkatan</span>
+                    <div class="flex gap-4 text-white">
+                        <div class="text-center"><div class="text-2xl font-black leading-none" id="cd-days">--</div><div class="text-[10px] uppercase mt-1">Hari</div></div>
+                        <div class="text-xl font-bold mt-0.5 opacity-50">:</div>
+                        <div class="text-center"><div class="text-2xl font-black leading-none" id="cd-hours">--</div><div class="text-[10px] uppercase mt-1">Jam</div></div>
+                        <div class="text-xl font-bold mt-0.5 opacity-50">:</div>
+                        <div class="text-center"><div class="text-2xl font-black leading-none" id="cd-mins">--</div><div class="text-[10px] uppercase mt-1">Mnt</div></div>
+                    </div>
+                </div>
+
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg">
+                    <span class="text-[10px] uppercase tracking-widest text-emerald-200 font-bold mb-1">Cuaca Makkah</span>
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-sun text-amber-400 text-2xl animate-pulse"></i>
+                        <span class="text-2xl font-black text-white">42°C</span>
+                    </div>
+                    <span class="text-[10px] text-emerald-100 mt-1">Prakiraan Musim Panas</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content-area" class="max-w-4xl mx-auto px-4 -mt-16 relative z-20 space-y-8">
+
+        <!-- 0. JADWAL ACARA MANASIK -->
+        <section class="bg-white rounded-3xl shadow-soft border border-gray-100 overflow-hidden sortable-section transition-transform duration-300">
+            <div class="bg-gradient-to-r from-gold-500 to-gold-600 px-6 sm:px-8 py-5 flex flex-col sm:flex-row sm:items-center justify-between text-white gap-4 relative shadow-inner">
+                <div class="flex items-center">
+                    <i class="fa-solid fa-grip-vertical drag-handle hidden mr-4 text-xl cursor-grab text-gold-200 hover:text-white transition"></i>
+                    <div class="bg-white/20 p-2.5 rounded-xl mr-4 backdrop-blur-sm border border-white/10">
+                        <i class="fa-solid fa-calendar-check text-xl"></i>
+                    </div>
+                    <h2 class="text-xl sm:text-2xl font-serif font-extrabold editable-text tracking-wide uppercase drop-shadow-md">0. Jadwal Manasik</h2>
+                </div>
+                <div class="bg-white text-emerald-900 px-4 py-1.5 rounded-lg text-sm font-bold shadow-md editable-text text-center sm:text-left self-start sm:self-auto">
+                    06 Sep 2026 • 07.30 WIB
+                </div>
+            </div>
+            <div class="p-6 sm:p-8">
+                <div class="mb-6 bg-amber-50/80 border border-amber-200 p-5 rounded-2xl text-amber-900 text-sm flex items-start shadow-sm transition-all hover:shadow-md">
+                    <i class="fa-solid fa-clock text-amber-500 mt-0.5 mr-4 text-xl"></i>
+                    <div class="leading-relaxed">
+                        <span class="font-bold block mb-1 text-amber-800 editable-text">Waktu & Tempat Pelaksanaan:</span>
+                        <span class="editable-text text-amber-700">Minggu, 6 September 2026 pukul 07.30 WIB s.d. Selesai. Mohon hadir tepat waktu dan mempersiapkan diri dengan baik.</span>
+                    </div>
+                </div>
+
+                <div class="space-y-3" id="grid-manasik">
+                    <!-- Schedule Items -->
+                    <div class="group flex items-start p-4 bg-slate-50/50 rounded-2xl border border-slate-100 hover:border-emerald-200 hover:bg-emerald-50/50 hover:shadow-sm transition-all relative">
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <span class="bg-white border border-emerald-100 text-emerald-700 font-bold text-xs px-3 py-1.5 rounded-lg mr-4 flex-shrink-0 mt-0.5 shadow-sm editable-text">07.30 – 08.00</span>
+                        <div class="text-sm font-semibold text-slate-700 mt-1 editable-text">Registrasi Peserta</div>
+                    </div>
+                    <div class="group flex items-start p-4 bg-slate-50/50 rounded-2xl border border-slate-100 hover:border-emerald-200 hover:bg-emerald-50/50 hover:shadow-sm transition-all relative">
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <span class="bg-white border border-emerald-100 text-emerald-700 font-bold text-xs px-3 py-1.5 rounded-lg mr-4 flex-shrink-0 mt-0.5 shadow-sm editable-text">08.00 – 10.00</span>
+                        <div class="text-sm font-semibold text-slate-700 mt-1 editable-text">Materi Filosofi Haji dan Umrah</div>
+                    </div>
+                    <div class="group flex items-start p-4 bg-amber-50/30 rounded-2xl border border-amber-100 hover:border-amber-200 hover:bg-amber-50 hover:shadow-sm transition-all relative">
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <span class="bg-amber-100 text-amber-800 font-bold text-xs px-3 py-1.5 rounded-lg mr-4 flex-shrink-0 mt-0.5 shadow-sm editable-text">10.00 – 10.15</span>
+                        <div class="text-sm font-semibold text-amber-900 mt-1 editable-text">Coffee Break (1)</div>
+                    </div>
+                    <div class="group flex items-start p-4 bg-slate-50/50 rounded-2xl border border-slate-100 hover:border-emerald-200 hover:bg-emerald-50/50 hover:shadow-sm transition-all relative">
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <span class="bg-white border border-emerald-100 text-emerald-700 font-bold text-xs px-3 py-1.5 rounded-lg mr-4 flex-shrink-0 mt-0.5 shadow-sm editable-text">10.15 – 12.00</span>
+                        <div class="text-sm font-semibold text-slate-700 mt-1 editable-text">Manfaat Haji dan Umrah dalam Kehidupan</div>
+                    </div>
+                    <div class="group flex items-start p-4 bg-emerald-600 rounded-2xl border border-emerald-700 shadow-md relative hover:shadow-lg transition-all">
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-white hover:text-red-200 bg-white/20 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <span class="bg-white/20 text-white border border-white/20 font-bold text-xs px-3 py-1.5 rounded-lg mr-4 flex-shrink-0 mt-0.5 editable-text">12.00 – 13.00</span>
+                        <div class="text-sm font-bold text-white mt-1 editable-text">ISOMA (Istirahat, Sholat, dan Makan)</div>
+                    </div>
+                    <div class="group flex items-start p-4 bg-slate-50/50 rounded-2xl border border-slate-100 hover:border-emerald-200 hover:bg-emerald-50/50 hover:shadow-sm transition-all relative">
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <span class="bg-white border border-emerald-100 text-emerald-700 font-bold text-xs px-3 py-1.5 rounded-lg mr-4 flex-shrink-0 mt-0.5 shadow-sm editable-text">13.00 – 15.30</span>
+                        <div class="text-sm font-semibold text-slate-700 mt-1 editable-text">Fiqih Manasik Haji dan Umrah</div>
+                    </div>
+                    <div class="group flex items-start p-4 bg-amber-50/30 rounded-2xl border border-amber-100 hover:border-amber-200 hover:bg-amber-50 hover:shadow-sm transition-all relative">
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <span class="bg-amber-100 text-amber-800 font-bold text-xs px-3 py-1.5 rounded-lg mr-4 flex-shrink-0 mt-0.5 shadow-sm editable-text">15.30 – 15.45</span>
+                        <div class="text-sm font-semibold text-amber-900 mt-1 editable-text">Coffee Break (2)</div>
+                    </div>
+                    <div class="group flex items-start p-4 bg-slate-50/50 rounded-2xl border border-slate-100 hover:border-emerald-200 hover:bg-emerald-50/50 hover:shadow-sm transition-all relative">
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <span class="bg-white border border-emerald-100 text-emerald-700 font-bold text-xs px-3 py-1.5 rounded-lg mr-4 flex-shrink-0 mt-0.5 shadow-sm editable-text">15.45 – 17.00</span>
+                        <div class="text-sm font-semibold text-slate-700 mt-1 editable-text">Teknis Perjalanan dan Sesi Tanya Jawab</div>
+                    </div>
+                </div>
+                
+                <button class="add-item-btn hidden items-center text-sm bg-emerald-50 text-emerald-700 px-4 py-2 rounded-lg hover:bg-emerald-100 font-bold mt-4 transition" onclick="addScheduleItem('grid-manasik')">
+                    <i class="fa-solid fa-plus mr-2"></i> Tambah Jadwal
+                </button>
+
+                <div class="mt-8 pt-6 border-t border-gray-100">
+                    <label class="check-container flex items-center cursor-pointer group p-3 -mx-3 rounded-xl hover:bg-emerald-50 transition-colors">
+                        <input type="checkbox" class="checklist-item hidden" id="read-manasik-schedule">
+                        <div class="w-7 h-7 rounded-lg border-2 border-gray-300 flex items-center justify-center mr-4 group-hover:border-emerald-500 transition-colors bg-white">
+                            <svg class="w-4 h-4 text-white hidden pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <span class="text-sm sm:text-base font-semibold text-gray-700 select-none editable-text">Saya sudah mencatat jadwal & susunan acara</span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <!-- 1. DATA JAMAAH & TIM -->
+        <section class="bg-white rounded-3xl shadow-soft border border-gray-100 overflow-hidden sortable-section transition-transform duration-300">
+            <div class="bg-gradient-to-r from-emerald-800 to-emerald-900 text-white px-6 sm:px-8 py-5 border-b border-emerald-950 flex items-center shadow-inner">
+                <i class="fa-solid fa-grip-vertical drag-handle hidden mr-4 text-xl cursor-grab text-emerald-300 hover:text-white transition"></i>
+                <div class="bg-white/10 p-2.5 rounded-xl mr-4 backdrop-blur-sm border border-white/10">
+                    <i class="fa-solid fa-users text-xl text-white"></i>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-serif font-extrabold editable-text tracking-wide uppercase drop-shadow-md">1. Data Jamaah & Tim</h2>
+            </div>
+            <div class="p-6 sm:p-8">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-8" id="grid-jamaah">
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100 text-center relative group hover:shadow-md transition cursor-default">
+                        <div class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 editable-text">Ikhwan</div>
+                        <div class="text-4xl font-black text-slate-800 editable-text">11</div>
+                    </div>
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100 text-center relative group hover:shadow-md transition cursor-default">
+                        <div class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 editable-text">Akhwat</div>
+                        <div class="text-4xl font-black text-slate-800 editable-text">21</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-emerald-600 to-emerald-800 p-5 rounded-2xl shadow-lg text-center col-span-2 md:col-span-2 flex flex-col justify-center relative transform hover:-translate-y-1 transition cursor-default">
+                        <div class="text-xs font-bold uppercase tracking-wider text-emerald-100 mb-2 editable-text">Total Keberangkatan</div>
+                        <div class="text-3xl sm:text-4xl font-black text-white"><span class="editable-text">32 Jamaah</span></div>
+                        <div class="text-sm font-medium text-emerald-200 mt-1 editable-text">+ 2 Tour Leader</div>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-4 sm:gap-6">
+                    <div class="flex items-center p-5 bg-white rounded-2xl border border-gray-100 shadow-sm hover:border-gold-300 transition relative">
+                        <div class="bg-gold-50 w-12 h-12 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                            <i class="fa-solid fa-id-badge text-gold-600 text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-0.5 editable-text">Tour Leader</div>
+                            <div class="font-bold text-gray-800 text-lg editable-text">Nurhidayat & Mahdiasari</div>
+                        </div>
+                        <!-- 💬 Direct WhatsApp Button -->
+                        <a href="https://wa.me/6281234567890" target="_blank" class="w-10 h-10 rounded-full bg-green-100 hover:bg-green-500 hover:text-white text-green-600 flex items-center justify-center transition-colors shadow-sm no-print" title="Hubungi via WhatsApp">
+                            <i class="fa-brands fa-whatsapp text-xl"></i>
+                        </a>
+                    </div>
+                    <div class="flex items-center p-5 bg-white rounded-2xl border border-gray-100 shadow-sm hover:border-emerald-300 transition relative">
+                        <div class="bg-emerald-50 w-12 h-12 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                            <i class="fa-solid fa-user-tie text-emerald-600 text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-0.5 editable-text">Muthowif</div>
+                            <div class="font-bold text-gray-800 text-lg editable-text">Ustadz Rifqi Wiladni</div>
+                        </div>
+                        <!-- 💬 Direct WhatsApp Button -->
+                        <a href="https://wa.me/6280987654321" target="_blank" class="w-10 h-10 rounded-full bg-green-100 hover:bg-green-500 hover:text-white text-green-600 flex items-center justify-center transition-colors shadow-sm no-print" title="Hubungi via WhatsApp">
+                            <i class="fa-brands fa-whatsapp text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="mt-8 pt-6 border-t border-gray-100">
+                    <label class="check-container flex items-center cursor-pointer group p-3 -mx-3 rounded-xl hover:bg-emerald-50 transition-colors">
+                        <input type="checkbox" class="checklist-item hidden" id="read-data-jamaah">
+                        <div class="w-7 h-7 rounded-lg border-2 border-gray-300 flex items-center justify-center mr-4 group-hover:border-emerald-500 transition-colors bg-white">
+                            <svg class="w-4 h-4 text-white hidden pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <span class="text-sm sm:text-base font-semibold text-gray-700 select-none editable-text">Saya sudah membaca informasi Data Jamaah</span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. STATUS PERSIAPAN -->
+        <section class="bg-white rounded-3xl shadow-soft border border-gray-100 overflow-hidden sortable-section transition-transform duration-300">
+            <div class="bg-gradient-to-r from-emerald-800 to-emerald-900 text-white px-6 sm:px-8 py-5 border-b border-emerald-950 flex items-center shadow-inner">
+                <i class="fa-solid fa-grip-vertical drag-handle hidden mr-4 text-xl cursor-grab text-emerald-300 hover:text-white transition"></i>
+                <div class="bg-white/10 p-2.5 rounded-xl mr-4 backdrop-blur-sm border border-white/10">
+                    <i class="fa-solid fa-clipboard-check text-xl text-white"></i>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-serif font-extrabold editable-text tracking-wide uppercase drop-shadow-md">2. Status Persiapan</h2>
+            </div>
+            <div class="p-6 sm:p-8">
+                <div class="space-y-4" id="grid-status">
+                    <div class="flex items-start p-5 bg-emerald-50/50 rounded-2xl border border-emerald-100 relative pr-10 group hover:shadow-sm transition">
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <div class="bg-white p-1.5 rounded-full shadow-sm mr-4 mt-0.5">
+                            <i class="fa-solid fa-check text-emerald-600"></i>
+                        </div>
+                        <div class="editable-text text-emerald-900 font-medium pt-1">VISA UMRAH seluruh jamaah telah terbit.</div>
+                    </div>
+                    <div class="flex items-start p-5 bg-emerald-50/50 rounded-2xl border border-emerald-100 relative pr-10 group hover:shadow-sm transition">
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <div class="bg-white p-1.5 rounded-full shadow-sm mr-4 mt-0.5">
+                            <i class="fa-solid fa-check text-emerald-600"></i>
+                        </div>
+                        <div class="editable-text text-emerald-900 font-medium pt-1">Seluruh jamaah terdaftar asuransi ASKRIDA SYARIAH.</div>
+                    </div>
+                    <div class="flex items-start p-5 bg-emerald-50/50 rounded-2xl border border-emerald-100 relative pr-10 group hover:shadow-sm transition">
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <div class="bg-white p-1.5 rounded-full shadow-sm mr-4 mt-0.5 flex-shrink-0">
+                            <i class="fa-solid fa-hotel text-emerald-600 text-xs"></i>
+                        </div>
+                        <div class="w-full">
+                            <div class="mb-3 editable-text text-emerald-900 font-bold pt-1">Hotel Dikonfirmasi (Booked):</div>
+                            <div class="grid sm:grid-cols-2 gap-4 mt-2">
+                                <div class="bg-white p-4 rounded-xl shadow-sm border border-emerald-50 hover:shadow-md transition cursor-default">
+                                    <div class="text-xs text-gray-400 font-bold tracking-wider mb-2 editable-text flex items-center gap-2"><i class="fa-solid fa-location-dot text-emerald-500"></i> MADINAH</div>
+                                    <div class="font-bold text-slate-800 text-lg"><span class="editable-text">DURRAT AL MADINAH</span></div>
+                                </div>
+                                <div class="bg-white p-4 rounded-xl shadow-sm border border-emerald-50 hover:shadow-md transition cursor-default">
+                                    <div class="text-xs text-gray-400 font-bold tracking-wider mb-2 editable-text flex items-center gap-2"><i class="fa-solid fa-location-dot text-gold-500"></i> MAKKAH</div>
+                                    <div class="font-bold text-slate-800 mb-1"><span class="editable-text">SUNRISE</span></div>
+                                    <div class="font-bold text-slate-800"><span class="editable-text">SNOOD AJYAD</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="add-item-btn hidden items-center text-sm bg-emerald-50 text-emerald-700 px-4 py-2 rounded-lg hover:bg-emerald-100 font-bold mt-4 transition" onclick="addStatusItem('grid-status')">
+                    <i class="fa-solid fa-plus mr-2"></i> Tambah Info Status
+                </button>
+
+                <div class="mt-8 pt-6 border-t border-gray-100">
+                    <label class="check-container flex items-center cursor-pointer group p-3 -mx-3 rounded-xl hover:bg-emerald-50 transition-colors">
+                        <input type="checkbox" class="checklist-item hidden" id="read-status">
+                        <div class="w-7 h-7 rounded-lg border-2 border-gray-300 flex items-center justify-center mr-4 group-hover:border-emerald-500 transition-colors bg-white">
+                            <svg class="w-4 h-4 text-white hidden pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <span class="text-sm sm:text-base font-semibold text-gray-700 select-none editable-text">Saya memahami status persiapan ini</span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. DETAIL PENERBANGAN -->
+        <section class="bg-white rounded-3xl shadow-soft border border-gray-100 overflow-hidden sortable-section transition-transform duration-300">
+            <div class="bg-gradient-to-r from-emerald-800 to-emerald-900 text-white px-6 sm:px-8 py-5 border-b border-emerald-950 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-inner">
+                <div class="flex items-center">
+                    <i class="fa-solid fa-grip-vertical drag-handle hidden mr-4 text-xl cursor-grab text-emerald-300 hover:text-white transition"></i>
+                    <div class="bg-white/10 p-2.5 rounded-xl mr-4 backdrop-blur-sm border border-white/10">
+                        <i class="fa-solid fa-plane-departure text-xl text-white"></i>
+                    </div>
+                    <h2 class="text-xl sm:text-2xl font-serif font-extrabold editable-text tracking-wide uppercase drop-shadow-md">3. Detail Penerbangan</h2>
+                </div>
+                
+                <!-- Airline Text Dropdown Selector -->
+                <div class="bg-white px-5 py-2.5 rounded-xl border border-emerald-700/50 flex items-center relative group min-w-[160px] justify-center shadow-sm hover:shadow transition-shadow">
+                    <span id="airline-name-display" class="font-bold text-slate-800 text-sm tracking-wider uppercase">Saudia Airlines</span>
+                    
+                    <select id="airline-selector" class="hidden absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="changeAirline(this.value)">
+                        <option value="saudia">Saudia Airlines</option>
+                        <option value="lion">Lion Air</option>
+                        <option value="emirates">Emirates</option>
+                        <option value="scoot">Scoot</option>
+                        <option value="qatar">Qatar Airways</option>
+                        <option value="garuda">Garuda Indonesia</option>
+                    </select>
+                    
+                    <div id="airline-edit-badge" class="hidden absolute -top-2 -right-2 bg-gold-500 text-white text-[10px] font-bold w-6 h-6 items-center justify-center rounded-full shadow-md z-10"><i class="fa-solid fa-chevron-down"></i></div>
+                </div>
+            </div>
+            <div class="p-6 sm:p-8 bg-slate-50/50">
+                <div class="space-y-6">
+                    <!-- Keberangkatan Boarding Pass -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col md:flex-row hover:shadow-md transition">
+                        <div class="bg-emerald-600 text-white p-4 md:w-32 flex flex-row md:flex-col items-center justify-between md:justify-center shrink-0">
+                            <div class="text-xs font-bold tracking-widest opacity-80 editable-text">BERANGKAT</div>
+                            <div class="text-2xl md:text-3xl font-black mt-0 md:mt-2 editable-text">07</div>
+                            <div class="text-sm font-bold uppercase editable-text">Sep</div>
+                        </div>
+                        <div class="p-6 w-full flex items-center justify-between">
+                            <div class="text-center md:text-left w-1/3">
+                                <div class="text-3xl font-black text-slate-800 editable-text">CGK</div>
+                                <div class="text-sm font-semibold text-gray-500 mt-1 editable-text">Jakarta</div>
+                                <div class="text-lg font-bold text-emerald-600 mt-2 editable-text">15.50</div>
+                            </div>
+                            <div class="flex-1 px-4 flex flex-col items-center relative">
+                                <div class="text-xs font-bold text-gray-400 mb-2 editable-text">SV821</div>
+                                <div class="w-full flex items-center">
+                                    <div class="h-px bg-gray-300 flex-1 border-t-2 border-dashed"></div>
+                                    <i class="fa-solid fa-plane text-gray-300 mx-3 transform text-xl"></i>
+                                    <div class="h-px bg-gray-300 flex-1 border-t-2 border-dashed"></div>
+                                </div>
+                                <div class="text-xs font-medium text-emerald-600 mt-2 bg-emerald-50 px-3 py-1 rounded-full">Direct</div>
+                            </div>
+                            <div class="text-center md:text-right w-1/3">
+                                <div class="text-3xl font-black text-slate-800 editable-text">JED</div>
+                                <div class="text-sm font-semibold text-gray-500 mt-1 editable-text">Jeddah</div>
+                                <div class="text-lg font-bold text-emerald-600 mt-2 editable-text">21.20</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kepulangan Boarding Pass -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col md:flex-row hover:shadow-md transition">
+                        <div class="bg-amber-500 text-white p-4 md:w-32 flex flex-row md:flex-col items-center justify-between md:justify-center shrink-0">
+                            <div class="text-xs font-bold tracking-widest opacity-80 editable-text">PULANG</div>
+                            <div class="text-2xl md:text-3xl font-black mt-0 md:mt-2 editable-text">14</div>
+                            <div class="text-sm font-bold uppercase editable-text">Sep</div>
+                        </div>
+                        <div class="p-6 w-full flex items-center justify-between">
+                            <div class="text-center md:text-left w-1/3">
+                                <div class="text-3xl font-black text-slate-800 editable-text">JED</div>
+                                <div class="text-sm font-semibold text-gray-500 mt-1 editable-text">Jeddah</div>
+                                <div class="text-lg font-bold text-amber-600 mt-2 editable-text">17.30</div>
+                            </div>
+                            <div class="flex-1 px-4 flex flex-col items-center relative">
+                                <div class="text-xs font-bold text-gray-400 mb-2 editable-text">SV816</div>
+                                <div class="w-full flex items-center">
+                                    <div class="h-px bg-gray-300 flex-1 border-t-2 border-dashed"></div>
+                                    <i class="fa-solid fa-plane text-gray-300 mx-3 transform text-xl"></i>
+                                    <div class="h-px bg-gray-300 flex-1 border-t-2 border-dashed"></div>
+                                </div>
+                                <div class="text-xs font-medium text-emerald-600 mt-2 bg-emerald-50 px-3 py-1 rounded-full">Direct</div>
+                            </div>
+                            <div class="text-center md:text-right w-1/3">
+                                <div class="text-3xl font-black text-slate-800 editable-text">CGK</div>
+                                <div class="text-sm font-semibold text-gray-500 mt-1 editable-text">Jakarta</div>
+                                <div class="text-lg font-bold text-amber-600 mt-2"><span class="editable-text">07.35</span> <span class="text-xs bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-bold editable-text ml-1">+1</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-gray-200">
+                    <label class="check-container flex items-center cursor-pointer group p-3 -mx-3 rounded-xl hover:bg-emerald-50 transition-colors">
+                        <input type="checkbox" class="checklist-item hidden" id="read-flight">
+                        <div class="w-7 h-7 rounded-lg border-2 border-gray-300 flex items-center justify-center mr-4 group-hover:border-emerald-500 transition-colors bg-white">
+                            <svg class="w-4 h-4 text-white hidden pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <span class="text-sm sm:text-base font-semibold text-gray-700 select-none editable-text">Saya sudah mencatat jadwal penerbangan</span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. INFO KESEHATAN & CUACA -->
+        <section class="bg-white rounded-3xl shadow-soft border border-gray-100 overflow-hidden sortable-section transition-transform duration-300">
+            <div class="bg-gradient-to-r from-emerald-800 to-emerald-900 text-white px-6 sm:px-8 py-5 border-b border-emerald-950 flex items-center shadow-inner">
+                <i class="fa-solid fa-grip-vertical drag-handle hidden mr-4 text-xl cursor-grab text-emerald-300 hover:text-white transition"></i>
+                <div class="bg-white/10 p-2.5 rounded-xl mr-4 backdrop-blur-sm border border-white/10">
+                    <i class="fa-solid fa-heart-pulse text-xl text-white"></i>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-serif font-extrabold editable-text tracking-wide uppercase drop-shadow-md">4. Kesehatan & Lingkungan</h2>
+            </div>
+            <div class="p-6 sm:p-8">
+                <div class="grid md:grid-cols-2 gap-4 sm:gap-6">
+                    <!-- Med Check -->
+                    <label class="check-container block bg-white border-2 border-slate-100 p-5 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition relative group">
+                        <div class="flex items-start">
+                            <input type="checkbox" class="checklist-item hidden" id="chk-med-check">
+                            <div class="w-7 h-7 rounded-lg border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-500 transition-colors">
+                                <svg class="w-4 h-4 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <div>
+                                <span class="font-bold text-slate-800 block mb-1 text-base editable-text">Medical Check Up <span class="text-emerald-600 text-xs bg-emerald-50 px-2 py-0.5 rounded ml-2">Disarankan</span></span>
+                                <span class="text-sm text-slate-500 leading-relaxed editable-text">Periksa asam urat, kolestrol, darah tinggi, & gula darah sebelum berangkat.</span>
+                            </div>
+                        </div>
+                    </label>
+
+                    <!-- Vaksin -->
+                    <label class="check-container block bg-red-50/50 border-2 border-red-100 p-5 rounded-2xl cursor-pointer hover:border-red-300 hover:shadow-md transition relative group">
+                        <div class="flex items-start">
+                            <input type="checkbox" class="checklist-item hidden" id="chk-vaksin">
+                            <div class="w-7 h-7 rounded-lg border-2 border-red-200 bg-white flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-red-400 transition-colors">
+                                <svg class="w-4 h-4 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <div>
+                                <span class="font-bold text-red-700 block mb-1 text-base flex items-center gap-2">
+                                    <span class="editable-text">WAJIB VAKSIN</span> <i class="fa-solid fa-syringe text-red-500"></i>
+                                </span>
+                                <span class="text-sm text-red-600/80 leading-relaxed editable-text">Pastikan sudah menerima vaksin Meningitis & Polio.</span>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. CHECKLIST PERLENGKAPAN -->
+        <section class="bg-white rounded-3xl shadow-soft border border-gray-100 overflow-hidden sortable-section transition-transform duration-300">
+            <div class="bg-slate-800 px-6 sm:px-8 py-5 border-b border-slate-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-inner">
+                <div class="flex items-center text-white">
+                    <i class="fa-solid fa-grip-vertical drag-handle hidden mr-4 text-xl cursor-grab text-slate-400 hover:text-white transition"></i>
+                    <div class="bg-white/10 p-2.5 rounded-xl mr-4 backdrop-blur-sm border border-white/10">
+                        <i class="fa-solid fa-suitcase-rolling text-xl"></i>
+                    </div>
+                    <h2 class="text-xl sm:text-2xl font-serif font-extrabold editable-text tracking-wide uppercase drop-shadow-md">5. Checklist Perlengkapan</h2>
+                </div>
+                <span class="text-xs bg-emerald-500 text-white px-3 py-1.5 rounded-full font-bold editable-text self-start sm:self-auto uppercase tracking-wide">Wajib & Anjuran</span>
+            </div>
+            
+            <div class="p-6 sm:p-8 space-y-10">
+                
+                <!-- Kategori 1: Pribadi Wajib -->
+                <div>
+                    <h3 class="font-bold text-lg text-slate-800 mb-4 flex items-center editable-text">
+                        <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center mr-3 text-emerald-600"><i class="fa-solid fa-user-check"></i></div> 
+                        Kebutuhan Pribadi Utama
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="grid-pribadi">
+                        <label class="check-container group flex items-start p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
+                            <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                            <input type="checkbox" class="checklist-item hidden" id="pack-obat">
+                            <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 mt-0.5 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
+                            <span class="text-sm font-medium text-slate-700 editable-text leading-relaxed">Obat Pribadi (darah tinggi, gula, asam urat, dsb.) <strong class="text-red-500">WAJIB</strong></span>
+                        </label>
+                        <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
+                            <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                            <input type="checkbox" class="checklist-item hidden" id="pack-vitamin">
+                            <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
+                            <span class="text-sm font-medium text-slate-700 editable-text">Vitamin & Suplemen</span>
+                        </label>
+                        <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
+                            <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                            <input type="checkbox" class="checklist-item hidden" id="pack-masker">
+                            <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
+                            <span class="text-sm font-medium text-slate-700 editable-text">Masker & Hand Sanitizer</span>
+                        </label>
+                        <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
+                            <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                            <input type="checkbox" class="checklist-item hidden" id="pack-tisu">
+                            <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
+                            <span class="text-sm font-medium text-slate-700 editable-text">Tisu Kering & Basah</span>
+                        </label>
+                        <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
+                            <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                            <input type="checkbox" class="checklist-item hidden" id="pack-mandi">
+                            <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
+                            <span class="text-sm font-medium text-slate-700 editable-text">Alat Mandi Pribadi</span>
+                        </label>
+                        <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
+                            <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                            <input type="checkbox" class="checklist-item hidden" id="pack-powerbank">
+                            <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
+                            <span class="text-sm font-medium text-slate-700 editable-text">Power Bank & Charger</span>
+                        </label>
+                    </div>
+                    <button class="add-item-btn hidden items-center text-sm bg-emerald-50 text-emerald-700 px-4 py-2 rounded-lg hover:bg-emerald-100 font-bold mt-4 transition" onclick="addChecklistItem('grid-pribadi')">
+                        <i class="fa-solid fa-plus mr-2"></i> Tambah Item Pribadi
+                    </button>
+                </div>
+
+                <!-- Kategori 2: Musim Panas -->
+                <div>
+                    <h3 class="font-bold text-lg text-slate-800 mb-4 flex items-center editable-text">
+                        <div class="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center mr-3 text-amber-500"><i class="fa-solid fa-sun"></i></div>
+                        Perlengkapan Cuaca Panas
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="grid-panas">
+                        <label class="check-container group flex items-start p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-amber-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
+                            <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                            <input type="checkbox" class="checklist-item hidden" id="panas-baju">
+                            <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 mt-0.5 flex-shrink-0 group-hover:border-amber-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
+                            <span class="text-sm font-medium text-slate-700 editable-text leading-relaxed">Baju muslim adem, longgar & menyerap keringat</span>
+                        </label>
+                        <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-amber-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
+                            <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                            <input type="checkbox" class="checklist-item hidden" id="panas-topi">
+                            <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-amber-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
+                            <span class="text-sm font-medium text-slate-700 editable-text">Topi / Payung Kecil</span>
+                        </label>
+                        <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-amber-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
+                            <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                            <input type="checkbox" class="checklist-item hidden" id="panas-sunblock">
+                            <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-amber-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
+                            <span class="text-sm font-medium text-slate-700 editable-text">Sunscreen / Sunblock & Pelembap</span>
+                        </label>
+                        <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-amber-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
+                            <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                            <input type="checkbox" class="checklist-item hidden" id="panas-kacamatag">
+                            <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-amber-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
+                            <span class="text-sm font-medium text-slate-700 editable-text">Kacamata Hitam (Opsional)</span>
+                        </label>
+                        <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-amber-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
+                            <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                            <input type="checkbox" class="checklist-item hidden" id="panas-botol">
+                            <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-amber-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
+                            <span class="text-sm font-medium text-slate-700 editable-text">Botol Minum Pribadi / Tumbler</span>
+                        </label>
+                    </div>
+                    <button class="add-item-btn hidden items-center text-sm bg-amber-50 text-amber-700 px-4 py-2 rounded-lg hover:bg-amber-100 font-bold mt-4 transition" onclick="addChecklistItem('grid-panas')">
+                        <i class="fa-solid fa-plus mr-2"></i> Tambah Item Musim Panas
+                    </button>
+                </div>
+
+                <!-- Kategori 3: Ibadah -->
+                <div>
+                    <h3 class="font-bold text-lg text-slate-800 mb-4 flex items-center editable-text">
+                        <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center mr-3 text-slate-600"><i class="fa-solid fa-kaaba"></i></div>
+                        Perlengkapan Ibadah
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="grid-ibadah">
+                        <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
+                            <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                            <input type="checkbox" class="checklist-item hidden" id="ibadah-ihram">
+                            <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
+                            <span class="text-sm font-medium text-slate-700 editable-text">Kain Ihram / Sabuk Ihram (Ikhwan)</span>
+                        </label>
+                        <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
+                            <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                            <input type="checkbox" class="checklist-item hidden" id="ibadah-mukena">
+                            <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
+                            <span class="text-sm font-medium text-slate-700 editable-text">Mukena (Akhwat)</span>
+                        </label>
+                        <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
+                            <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                            <input type="checkbox" class="checklist-item hidden" id="ibadah-sandal">
+                            <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
+                            <span class="text-sm font-medium text-slate-700 editable-text">Sandal Umrah & Tas Sandal</span>
+                        </label>
+                        <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
+                            <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                            <input type="checkbox" class="checklist-item hidden" id="ibadah-buku">
+                            <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
+                            <span class="text-sm font-medium text-slate-700 editable-text">Al-Qur’an Kecil / Buku Doa</span>
+                        </label>
+                    </div>
+                    <button class="add-item-btn hidden items-center text-sm bg-slate-100 text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-200 font-bold mt-4 transition" onclick="addChecklistItem('grid-ibadah')">
+                        <i class="fa-solid fa-plus mr-2"></i> Tambah Item Ibadah
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. KETENTUAN BARANG BAWAAN PESAWAT -->
+        <section class="bg-white rounded-3xl shadow-soft border border-gray-100 overflow-hidden sortable-section transition-transform duration-300">
+            <div class="bg-gradient-to-r from-amber-600 to-amber-700 text-white px-6 sm:px-8 py-5 border-b border-amber-800 flex items-center shadow-inner">
+                <i class="fa-solid fa-grip-vertical drag-handle hidden mr-4 text-xl cursor-grab text-amber-300 hover:text-white transition"></i>
+                <div class="bg-white/20 p-2.5 rounded-xl mr-4 backdrop-blur-sm border border-white/10">
+                    <i class="fa-solid fa-triangle-exclamation text-xl text-white"></i>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-serif font-extrabold editable-text tracking-wide uppercase drop-shadow-md">6. Aturan Bagasi Pesawat</h2>
+            </div>
+            <div class="p-6 sm:p-8">
+                <ul class="grid sm:grid-cols-2 gap-4 mb-8" id="grid-pesawat">
+                    <li class="flex items-start bg-slate-50 p-4 rounded-2xl border border-slate-100 relative pr-10 group hover:shadow-sm transition">
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <div class="bg-white p-2 rounded-full shadow-sm mr-4 shrink-0 mt-0.5"><i class="fa-solid fa-ban text-red-500"></i></div>
+                        <span class="text-sm text-slate-700 font-medium leading-relaxed editable-text">Cairan maksimal 100 ML (sabun, parfum, lotion) untuk tas kabin.</span>
+                    </li>
+                    <li class="flex items-start bg-slate-50 p-4 rounded-2xl border border-slate-100 relative pr-10 group hover:shadow-sm transition">
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <div class="bg-white p-2 rounded-full shadow-sm mr-4 shrink-0 mt-0.5"><i class="fa-solid fa-scissors text-gray-500"></i></div>
+                        <span class="text-sm text-slate-700 font-medium leading-relaxed editable-text">Benda tajam (gunting, silet) WAJIB masuk koper bagasi.</span>
+                    </li>
+                    <li class="flex items-start bg-slate-50 p-4 rounded-2xl border border-slate-100 relative pr-10 group hover:shadow-sm transition">
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <div class="bg-white p-2 rounded-full shadow-sm mr-4 shrink-0 mt-0.5"><i class="fa-solid fa-battery-full text-emerald-500"></i></div>
+                        <span class="text-sm text-slate-700 font-medium leading-relaxed editable-text">Power bank WAJIB di tas kabin (TIDAK BOLEH DI BAGASI).</span>
+                    </li>
+                </ul>
+                
+                <button class="add-item-btn hidden items-center text-sm bg-amber-50 text-amber-700 px-4 py-2 rounded-lg hover:bg-amber-100 font-bold mb-6 transition" onclick="addTextItem('grid-pesawat', 'fa-info-circle')">
+                    <i class="fa-solid fa-plus mr-2"></i> Tambah Aturan
+                </button>
+
+                <div class="border-t border-gray-100 pt-6">
+                    <label class="check-container flex items-center cursor-pointer group p-3 -mx-3 rounded-xl hover:bg-amber-50 transition-colors">
+                        <input type="checkbox" class="checklist-item hidden" id="read-pesawat">
+                        <div class="w-7 h-7 rounded-lg border-2 border-gray-300 flex items-center justify-center mr-4 group-hover:border-amber-500 transition-colors bg-white">
+                            <svg class="w-4 h-4 text-white hidden pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <span class="text-sm sm:text-base font-semibold text-gray-700 select-none editable-text">Saya paham dan akan mematuhi aturan bagasi</span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. INFORMASI TAMBAHAN -->
+        <section class="bg-white rounded-3xl shadow-soft border border-gray-100 overflow-hidden mb-12 sortable-section transition-transform duration-300">
+            <div class="bg-gradient-to-r from-emerald-800 to-emerald-900 text-white px-6 sm:px-8 py-5 border-b border-emerald-950 flex items-center shadow-inner">
+                <i class="fa-solid fa-grip-vertical drag-handle hidden mr-4 text-xl cursor-grab text-emerald-300 hover:text-white transition"></i>
+                <div class="bg-white/10 p-2.5 rounded-xl mr-4 backdrop-blur-sm border border-white/10">
+                    <i class="fa-solid fa-circle-info text-xl text-white"></i>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-serif font-extrabold editable-text tracking-wide uppercase drop-shadow-md">7. Informasi Lainnya</h2>
+            </div>
+            
+            <div class="p-6 sm:p-8">
+                <ul class="space-y-4 mb-8" id="grid-info">
+                    <li class="flex items-start relative pr-10 group bg-transparent hover:bg-slate-50 p-3 rounded-xl transition-colors -mx-3">
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <i class="fa-solid fa-wifi text-emerald-500 mt-1 mr-4 text-lg w-5 text-center"></i>
+                        <span class="text-sm sm:text-base text-slate-700 font-medium editable-text w-full">Paket Internet & Hotel Manasik: Hubungi Tim Samawi Travel.</span>
+                    </li>
+                    <li class="flex items-start relative pr-10 group bg-transparent hover:bg-slate-50 p-3 rounded-xl transition-colors -mx-3">
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <i class="fa-solid fa-mobile-screen text-amber-500 mt-1 mr-4 text-lg w-5 text-center"></i>
+                        <span class="text-sm sm:text-base text-slate-700 font-medium editable-text w-full">Seluruh jamaah diwajibkan membuat akun Nusuk secara mandiri untuk permit Raudhah.</span>
+                    </li>
+                    <li class="flex items-start relative pr-10 group bg-transparent hover:bg-slate-50 p-3 rounded-xl transition-colors -mx-3">
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <i class="fa-solid fa-wallet text-emerald-500 mt-1 mr-4 text-lg w-5 text-center"></i>
+                        <span class="text-sm sm:text-base text-slate-700 font-medium editable-text w-full">Biaya Over Bagasi & Transport Lokal di luar program ditanggung masing-masing jamaah.</span>
+                    </li>
+                    <li class="flex items-start relative pr-10 group bg-transparent hover:bg-slate-50 p-3 rounded-xl transition-colors -mx-3">
+                        <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                        <i class="fa-solid fa-users text-emerald-500 mt-1 mr-4 text-lg w-5 text-center"></i>
+                        <span class="text-sm sm:text-base text-slate-700 font-medium editable-text w-full">Bagi yang mengajak keluarga saat manasik mohon konfirmasi sebelumnya.</span>
+                    </li>
+                </ul>
+                
+                <button class="add-item-btn hidden items-center text-sm bg-emerald-50 text-emerald-700 px-4 py-2 rounded-lg hover:bg-emerald-100 font-bold mb-6 transition" onclick="addTextItem('grid-info', 'fa-check')">
+                    <i class="fa-solid fa-plus mr-2"></i> Tambah Informasi
+                </button>
+
+                <div class="border-t border-gray-100 pt-6">
+                    <label class="check-container flex items-center cursor-pointer group p-3 -mx-3 rounded-xl hover:bg-emerald-50 transition-colors">
+                        <input type="checkbox" class="checklist-item hidden" id="read-tambahan">
+                        <div class="w-7 h-7 rounded-lg border-2 border-gray-300 flex items-center justify-center mr-4 group-hover:border-emerald-500 transition-colors bg-white">
+                            <svg class="w-4 h-4 text-white hidden pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <span class="text-sm sm:text-base font-semibold text-gray-700 select-none editable-text">Saya sudah membaca informasi tambahan ini</span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. BEKAL SPIRITUAL (Audio Talbiyah) -->
+        <section class="bg-white rounded-3xl shadow-soft border border-gray-100 overflow-hidden mb-12 sortable-section transition-transform duration-300">
+            <div class="bg-gradient-to-r from-indigo-800 to-indigo-900 text-white px-6 sm:px-8 py-5 border-b border-indigo-950 flex items-center shadow-inner">
+                <i class="fa-solid fa-grip-vertical drag-handle hidden mr-4 text-xl cursor-grab text-indigo-300 hover:text-white transition"></i>
+                <div class="bg-white/10 p-2.5 rounded-xl mr-4 backdrop-blur-sm border border-white/10">
+                    <i class="fa-solid fa-book-quran text-xl text-white"></i>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-serif font-extrabold editable-text tracking-wide uppercase drop-shadow-md">8. Bekal Spiritual</h2>
+            </div>
+            
+            <div class="p-6 sm:p-8">
+                <div class="bg-indigo-50/50 dark:bg-slate-800/50 border border-indigo-100 dark:border-slate-700 rounded-2xl p-6 text-center relative group">
+                    <div class="mb-4">
+                        <span class="bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-300 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest editable-text">Bacaan Talbiyah</span>
+                    </div>
+                    <p class="text-2xl md:text-3xl font-serif font-bold text-slate-800 dark:text-white leading-loose mb-4 editable-text text-right" dir="rtl">
+                        لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لاَ شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ، وَالنِّعْمَةَ، لَكَ وَالْمُلْكَ، لاَ شَرِيكَ لَكَ
+                    </p>
+                    <p class="text-indigo-900 dark:text-indigo-300 font-medium mb-2 editable-text italic">
+                        "Labbaikallahumma labbaik, labbaika laa syariika laka labbaik. Innal hamda wan ni'mata laka wal mulk. Laa syariika lak."
+                    </p>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-6 editable-text">
+                        Artinya: "Aku penuhi panggilan-Mu ya Allah, aku penuhi panggilan-Mu. Aku penuhi panggilan-Mu, tiada sekutu bagi-Mu, aku penuhi panggilan-Mu. Sesungguhnya pujian dan ni'mat adalah milik-Mu, begitu juga kerajaan, tiada sekutu bagi-Mu."
+                    </p>
+                    
+                    <button onclick="playTalbiyah()" id="play-talbiyah-btn" class="inline-flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white rounded-full px-6 py-3 font-bold transition shadow-md no-print hover:-translate-y-0.5">
+                        <i class="fa-solid fa-play mr-2" id="play-icon"></i> <span id="play-text">Dengarkan Audio Niat</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Actions -->
+    <div class="text-center pb-24 no-print flex flex-col sm:flex-row items-center justify-center gap-3 px-4">
+        <button id="reset-btn" class="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white font-medium transition py-2 px-4 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 border border-transparent dark:border-slate-700">
+            <i class="fa-solid fa-rotate-left mr-1"></i> Reset Progress
+        </button>
+        <!-- 🖨️ Cetak PDF Button -->
+        <button onclick="window.print()" class="text-sm text-emerald-700 dark:text-emerald-400 font-bold transition py-2 px-6 rounded-full bg-emerald-100 hover:bg-emerald-200 dark:bg-emerald-900/30 dark:hover:bg-emerald-900/60 shadow-sm border border-emerald-200 dark:border-emerald-800">
+            <i class="fa-solid fa-print mr-1"></i> Cetak / Simpan PDF
+        </button>
+        <button id="reset-layout-btn" class="text-sm text-red-400 hover:text-red-600 font-medium transition py-2 px-4 rounded-full hover:bg-red-50 mt-2 sm:mt-0 hidden">
+            <i class="fa-solid fa-trash-can mr-1"></i> Reset Layout Default
+        </button>
+    </div>
+
+    <!-- Edit & Theme Floating Buttons -->
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 no-print">
+        <!-- 🌙 Dark Mode Toggle -->
+        <button id="theme-toggle-btn" onclick="toggleTheme()" class="bg-slate-800 dark:bg-amber-400 hover:bg-slate-700 dark:hover:bg-amber-500 text-white dark:text-slate-900 w-12 h-12 rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all transform hover:-translate-y-1 self-end">
+            <i class="fa-solid fa-moon dark:hidden"></i>
+            <i class="fa-solid fa-sun hidden dark:block"></i>
+        </button>
+        <button id="edit-mode-btn" onclick="toggleEditMode()" class="bg-gold-500 hover:bg-gold-600 text-white px-6 py-4 rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all transform hover:-translate-y-1 font-bold text-sm">
+            <i class="fa-solid fa-pen mr-2"></i> Mode Edit
+        </button>
+    </div>
+
+    <!-- Custom Modal Overlay (Replaces alert & confirm) -->
+    <div id="custom-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity opacity-0" id="modal-backdrop"></div>
+        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 relative z-10 transform scale-95 opacity-0 transition-all duration-300" id="modal-content">
+            <div class="flex items-center justify-center w-14 h-14 rounded-full mb-5 mx-auto" id="modal-icon-container">
+                <i id="modal-icon" class="text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-center text-slate-800 mb-2" id="modal-title"></h3>
+            <p class="text-sm text-center text-slate-600 mb-8 leading-relaxed" id="modal-message"></p>
+            <div class="flex flex-col sm:flex-row gap-3 justify-center" id="modal-actions">
+                <!-- Buttons injected dynamically via JS -->
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Menerima Config Bawaan Server
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'umrah-app-default';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        
+        let app, auth, db, userId;
+
+        // --- Variabel Utama ---
+        window.isEditMode = false;
+        window.sortableInstance = null;
+        let pendingAction = null; 
+        let userProgress = {}; // Menyimpan status checklist pribadi dari Cloud
+
+        // --- Inisialisasi Firebase ---
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+        } catch (e) {
+            console.error("Firebase init error:", e);
+        }
+
+        // --- Setup Autentikasi & Database Real-time ---
+        async function initCloud() {
+            if (!auth) return;
+            try {
+                if (typeof __initial_auth_token !== 'undefined') {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+                userId = auth.currentUser?.uid || crypto.randomUUID();
+                setupRealtime(); // Mulai memantau perubahan data
+            } catch (error) {
+                console.error("Auth failed:", error);
+            }
+        }
+
+        function setupRealtime() {
+            // 1. Memantau Tampilan Tata Letak / Konten secara Global
+            const layoutRef = doc(db, 'artifacts', appId, 'public', 'data', 'state', 'layout');
+            onSnapshot(layoutRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.data();
+                    // Jangan timpa teks jika admin sedang aktif mengedit
+                    if (!window.isEditMode) {
+                        if (data.html) {
+                            const mainArea = document.getElementById('main-content-area');
+                            if (mainArea.innerHTML !== data.html) {
+                                mainArea.innerHTML = data.html;
+                                applyProgress(); // Terapkan ulang centang karena innerHTML mereset input
+                            }
+                        }
+                        if (data.airline) {
+                            window.changeAirline(data.airline, false); 
+                            const sel = document.getElementById('airline-selector');
+                            if (sel) sel.value = data.airline;
+                        }
+                    }
+                }
+            }, (err) => console.error("Snapshot error:", err));
+
+            // 2. Memantau Progress Pribadi (Checklist Masing-Masing Jamaah)
+            const progressRef = doc(db, 'artifacts', appId, 'users', userId, 'progress', 'checkboxes');
+            onSnapshot(progressRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    userProgress = snapshot.data();
+                } else {
+                    userProgress = {};
+                }
+                applyProgress();
+            }, (err) => console.error("Snapshot progress error:", err));
+        }
+
+        // --- Logika Pilihan Maskapai ---
+        const airlines = {
+            'saudia': { name: 'Saudia Airlines' },
+            'lion': { name: 'Lion Air' },
+            'emirates': { name: 'Emirates' },
+            'scoot': { name: 'Scoot' },
+            'qatar': { name: 'Qatar Airways' },
+            'garuda': { name: 'Garuda Indonesia' }
+        };
+
+        window.changeAirline = function(val, triggerSave = true) {
+            const airline = airlines[val];
+            if(airline) {
+                const textDisplay = document.getElementById('airline-name-display');
+                if(textDisplay) textDisplay.textContent = airline.name;
+                
+                // Simpan otomatis ke cloud jika sedang diubah dalam Mode Edit
+                if (triggerSave && window.isEditMode) window.saveLayoutToCloud();
+            }
+        };
+
+        // --- Logika Progres Checklist ---
+        function applyProgress() {
+            document.querySelectorAll('.checklist-item').forEach(cb => {
+                cb.checked = !!userProgress[cb.id];
+            });
+            window.updateProgress();
+        }
+
+        window.updateProgress = function() {
+            const checkboxes = document.querySelectorAll('.checklist-item');
+            const total = checkboxes.length;
+            const checked = document.querySelectorAll('.checklist-item:checked').length;
+            const percentage = total === 0 ? 0 : Math.round((checked / total) * 100);
+            
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            
+            if (!progressBar || !progressText) return; 
+            
+            progressBar.style.width = `${percentage}%`;
+            progressText.innerText = `${percentage}%`;
+
+            if(percentage === 100 && total > 0) {
+                progressBar.classList.remove('from-gold-400', 'to-gold-600');
+                progressBar.classList.add('from-emerald-400', 'to-emerald-600');
+                progressText.classList.replace('text-emerald-600', 'text-white');
+                progressText.classList.replace('bg-emerald-50', 'bg-emerald-500');
+            } else {
+                progressBar.classList.add('from-gold-400', 'to-gold-600');
+                progressBar.classList.remove('from-emerald-400', 'to-emerald-600');
+                progressText.classList.replace('text-white', 'text-emerald-600');
+                progressText.classList.replace('bg-emerald-500', 'bg-emerald-50');
+            }
+        };
+
+        // --- Simpan ke Cloud (Database) ---
+        window.saveProgressToCloud = function(id, isChecked) {
+            if (!userId) return;
+            userProgress[id] = isChecked;
+            const progressRef = doc(db, 'artifacts', appId, 'users', userId, 'progress', 'checkboxes');
+            // { merge: true } berfungsi untuk menggabungkan data, tidak menghapus yg sudah ada
+            setDoc(progressRef, { [id]: isChecked }, { merge: true }).catch(console.error);
+        };
+
+        window.saveLayoutToCloud = function() {
+            if (!userId) return;
+            const mainArea = document.getElementById('main-content-area');
+            const selectedAirline = document.getElementById('airline-selector')?.value || 'saudia';
+            
+            const layoutRef = doc(db, 'artifacts', appId, 'public', 'data', 'state', 'layout');
+            setDoc(layoutRef, {
+                html: mainArea.innerHTML,
+                airline: selectedAirline
+            }, { merge: true }).catch(console.error);
+        };
+
+        // --- Logika Menambah Elemen (Sama seperti sebelumnya, tapi diekspor ke window) ---
+        window.addChecklistItem = function(containerId) {
+            const container = document.getElementById(containerId);
+            const newId = 'chk-' + Date.now();
+            const colorClass = containerId === 'grid-panas' ? 'amber' : 'emerald';
+            const html = `
+                <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-${colorClass}-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
+                    <button class="delete-item-btn absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                    <input type="checkbox" class="checklist-item hidden" id="${newId}">
+                    <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-${colorClass}-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
+                    <span class="text-sm font-medium text-slate-700 editable-text w-full" contenteditable="true">Item Baru</span>
+                </label>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+            window.updateProgress();
+        };
+
+        window.addScheduleItem = function(containerId) {
+            const container = document.getElementById(containerId);
+            const html = `
+                <div class="group flex items-start p-4 bg-slate-50/50 rounded-2xl border border-slate-100 hover:border-emerald-200 hover:bg-emerald-50/50 hover:shadow-sm transition-all relative">
+                    <button class="delete-item-btn absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                    <span class="bg-white border border-emerald-100 text-emerald-700 font-bold text-xs px-3 py-1.5 rounded-lg mr-4 flex-shrink-0 mt-0.5 shadow-sm editable-text" contenteditable="true">00.00</span>
+                    <div class="text-sm font-semibold text-slate-700 mt-1 editable-text w-full" contenteditable="true">Acara Baru</div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+        };
+
+        window.addStatusItem = function(containerId) {
+            const container = document.getElementById(containerId);
+            const html = `
+                <div class="flex items-start p-5 bg-emerald-50/50 rounded-2xl border border-emerald-100 relative pr-10 group hover:shadow-sm transition">
+                    <button class="delete-item-btn absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                    <div class="bg-white p-1.5 rounded-full shadow-sm mr-4 mt-0.5 flex-shrink-0">
+                        <i class="fa-solid fa-check text-emerald-600"></i>
+                    </div>
+                    <div class="editable-text text-emerald-900 font-medium pt-1 w-full" contenteditable="true">Informasi Status Baru</div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+        };
+
+        window.addTextItem = function(containerId, iconClass) {
+            const container = document.getElementById(containerId);
+            const html = `
+                <li class="flex items-start relative pr-10 group bg-transparent hover:bg-slate-50 p-3 rounded-xl transition-colors -mx-3">
+                    <button class="delete-item-btn absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
+                    <i class="fa-solid ${iconClass} text-emerald-500 mt-1 mr-4 text-lg w-5 text-center"></i>
+                    <span class="text-sm sm:text-base text-slate-700 font-medium editable-text w-full" contenteditable="true">Informasi Tambahan Baru</span>
+                </li>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+        };
+
+        // --- Logika Audio Talbiyah ---
+        let isPlaying = false;
+        let utterance = null;
+        window.playTalbiyah = function() {
+            const btn = document.getElementById('play-talbiyah-btn');
+            const icon = document.getElementById('play-icon');
+            const text = document.getElementById('play-text');
+
+            if (isPlaying) {
+                window.speechSynthesis.cancel();
+                isPlaying = false;
+                icon.className = 'fa-solid fa-play mr-2';
+                text.innerText = 'Dengarkan Audio Niat';
+                btn.classList.replace('bg-red-500', 'bg-indigo-600');
+                btn.classList.replace('hover:bg-red-600', 'hover:bg-indigo-700');
+                return;
+            }
+
+            const textToSpeak = "Labbaikallahumma labbaik, labbaika laa syariika laka labbaik. Innal hamda wan ni'mata laka wal mulk. Laa syariika lak.";
+            utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'id-ID'; 
+            utterance.rate = 0.8; 
+
+            utterance.onend = () => {
+                isPlaying = false;
+                icon.className = 'fa-solid fa-play mr-2';
+                text.innerText = 'Dengarkan Audio Niat';
+                btn.classList.replace('bg-red-500', 'bg-indigo-600');
+                btn.classList.replace('hover:bg-red-600', 'hover:bg-indigo-700');
+            };
+
+            window.speechSynthesis.speak(utterance);
+            isPlaying = true;
+            icon.className = 'fa-solid fa-stop mr-2';
+            text.innerText = 'Hentikan Audio';
+            btn.classList.replace('bg-indigo-600', 'bg-red-500');
+            btn.classList.replace('hover:bg-indigo-700', 'hover:bg-red-600');
+        };
+
+        // --- Logika Mode Edit & Animasi ---
+        window.toggleTheme = function() {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        };
+
+        window.toggleEditMode = function() {
+            window.isEditMode = !window.isEditMode;
+            document.body.classList.toggle('edit-mode', window.isEditMode);
+            const btn = document.getElementById('edit-mode-btn');
+            const mainArea = document.getElementById('main-content-area');
+
+            if(window.isEditMode) {
+                // Masuk Mode Edit
+                btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up mr-2"></i> Simpan ke Cloud';
+                btn.classList.replace('bg-gold-500', 'bg-blue-600');
+                btn.classList.replace('hover:bg-gold-600', 'hover:bg-blue-700');
+                document.getElementById('reset-layout-btn').classList.remove('hidden');
+
+                document.querySelectorAll('.editable-text').forEach(el => el.setAttribute('contenteditable', 'true'));
+
+                if(!window.sortableInstance) {
+                    window.sortableInstance = new Sortable(mainArea, {
+                        handle: '.drag-handle',
+                        animation: 150,
+                        ghostClass: 'opacity-50'
+                    });
+                } else {
+                    window.sortableInstance.option('disabled', false);
+                }
+            } else {
+                // Keluar & Simpan Mode Edit
+                btn.innerHTML = '<i class="fa-solid fa-pen mr-2"></i> Mode Edit';
+                btn.classList.replace('bg-blue-600', 'bg-gold-500');
+                btn.classList.replace('hover:bg-blue-700', 'hover:bg-gold-600');
+                document.getElementById('reset-layout-btn').classList.add('hidden');
+
+                document.querySelectorAll('.editable-text').forEach(el => el.removeAttribute('contenteditable'));
+                if(window.sortableInstance) window.sortableInstance.option('disabled', true);
+
+                // SIMPAN KE CLOUD DATABASE!
+                window.saveLayoutToCloud();
+                window.showModal('Tersimpan di Cloud', 'Semua perubahan telah berhasil diunggah! Jamaah yang sedang membuka link ini akan otomatis melihat versi terbarunya tanpa perlu me-refresh.', 'success');
+            }
+        };
+
+        window.showModal = function(title, message, type, onConfirm = null) {
+            const modal = document.getElementById('custom-modal');
+            const modalBackdrop = document.getElementById('modal-backdrop');
+            const modalContent = document.getElementById('modal-content');
+            
+            document.body.classList.add('modal-open');
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-message').innerHTML = message;
+            
+            const iconContainer = document.getElementById('modal-icon-container');
+            const icon = document.getElementById('modal-icon');
+            const actions = document.getElementById('modal-actions');
+            actions.innerHTML = ''; 
+
+            if (type === 'success') {
+                iconContainer.className = 'flex items-center justify-center w-14 h-14 rounded-full mb-5 mx-auto bg-emerald-100 text-emerald-600';
+                icon.className = 'fa-solid fa-check text-2xl';
+                actions.innerHTML = `<button onclick="closeModal()" class="w-full px-6 py-2.5 rounded-xl text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition shadow-sm">OK, Mengerti</button>`;
+            } 
+            else if (type === 'confirm' || type === 'danger') {
+                const isDanger = type === 'danger';
+                iconContainer.className = isDanger ? 'flex items-center justify-center w-14 h-14 rounded-full mb-5 mx-auto bg-red-100 text-red-600' : 'flex items-center justify-center w-14 h-14 rounded-full mb-5 mx-auto bg-amber-100 text-amber-600';
+                icon.className = isDanger ? 'fa-solid fa-triangle-exclamation text-2xl' : 'fa-solid fa-circle-question text-2xl';
+                
+                const confirmBtnColor = isDanger ? 'bg-red-600 hover:bg-red-700' : 'bg-emerald-600 hover:bg-emerald-700';
+                
+                actions.innerHTML = `
+                    <button onclick="closeModal()" class="flex-1 px-4 py-2.5 rounded-xl text-sm font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition">Batal</button>
+                    <button id="modal-confirm-btn" class="flex-1 px-4 py-2.5 rounded-xl text-sm font-bold text-white ${confirmBtnColor} transition shadow-sm">Ya, Lanjutkan</button>
+                `;
+                
+                pendingAction = onConfirm;
+                document.getElementById('modal-confirm-btn').addEventListener('click', () => {
+                    if (pendingAction) pendingAction();
+                    window.closeModal();
+                });
+            }
+
+            modal.classList.remove('hidden');
+            void modal.offsetWidth; // Trigger reflow animasi
+            modalBackdrop.classList.remove('opacity-0');
+            modalContent.classList.remove('scale-95', 'opacity-0');
+        };
+
+        window.closeModal = function() {
+            const modal = document.getElementById('custom-modal');
+            const modalBackdrop = document.getElementById('modal-backdrop');
+            const modalContent = document.getElementById('modal-content');
+            
+            modalBackdrop.classList.add('opacity-0');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.body.classList.remove('modal-open');
+                pendingAction = null;
+            }, 300);
+        };
+
+        // --- Logika Countdown (Hitung Mundur) ---
+        function initCountdown() {
+            const targetDate = new Date('2026-09-07T00:00:00').getTime();
+            
+            const updateTimer = () => {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                if (distance < 0) {
+                    const eDays = document.getElementById('cd-days');
+                    if(eDays) {
+                        eDays.innerText = "00";
+                        document.getElementById('cd-hours').innerText = "00";
+                        document.getElementById('cd-mins').innerText = "00";
+                    }
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+                const eDays = document.getElementById('cd-days');
+                const eHours = document.getElementById('cd-hours');
+                const eMins = document.getElementById('cd-mins');
+                
+                if(eDays) eDays.innerText = days.toString().padStart(2, '0');
+                if(eHours) eHours.innerText = hours.toString().padStart(2, '0');
+                if(eMins) eMins.innerText = minutes.toString().padStart(2, '0');
+            };
+            
+            updateTimer(); 
+            setInterval(updateTimer, 60000); 
+        }
+
+        // --- Eksekusi Saat Halaman Dimuat ---
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. Inisialisasi Tema
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            }
+            
+            // 2. Mulai Hitung Mundur
+            initCountdown();
+
+            // 3. Menghubungkan ke Database Cloud!
+            initCloud();
+
+            // 4. Deteksi Klik Checklist untuk disimpan ke Cloud
+            document.addEventListener('change', (e) => {
+                if(e.target.classList.contains('checklist-item')) {
+                    window.saveProgressToCloud(e.target.id, e.target.checked);
+                    window.updateProgress();
+                }
+            });
+
+            // 5. Mencegah error default saat mengetik
+            document.addEventListener('click', (e) => {
+                if(window.isEditMode && e.target.classList.contains('editable-text')) {
+                    // Biarkan browser menghandle klik text
+                }
+            });
+
+            // 6. Tombol Hapus Item
+            document.addEventListener('click', (e) => {
+                const btn = e.target.closest('.delete-item-btn');
+                if(btn && window.isEditMode) {
+                    window.showModal('Hapus Item?', 'Apakah Anda yakin ingin menghapus item ini dari daftar? Tindakan ini tidak dapat dibatalkan jika Anda menyimpan perubahan ke Cloud.', 'confirm', () => {
+                        const parent = btn.parentElement;
+                        parent.remove();
+                        window.updateProgress();
+                    });
+                }
+            });
+
+            // 7. Tombol Reset Checklist
+            const resetBtn = document.getElementById('reset-btn');
+            if(resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                    window.showModal('Reset Progress?', 'Apakah Anda yakin ingin mengosongkan semua checklist persiapan? Status akan kembali menjadi 0%.', 'confirm', () => {
+                        document.querySelectorAll('.checklist-item').forEach(cb => {
+                            cb.checked = false;
+                            // Menghapus data dari Cloud
+                            window.saveProgressToCloud(cb.id, false); 
+                        });
+                        window.updateProgress();
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    });
+                });
+            }
+
+            // 8. Tombol Hapus Layout / Reset Default
+            const resetLayoutBtn = document.getElementById('reset-layout-btn');
+            if(resetLayoutBtn) {
+                resetLayoutBtn.addEventListener('click', () => {
+                    window.showModal(
+                        'Reset Tata Letak & Teks (Global)?', 
+                        '<strong class="text-red-600 block mb-2">PERINGATAN!</strong> Ini akan menghapus data yang tersimpan di Cloud dan mengembalikan seluruh susunan/teks ke keadaan awal pabrik bagi <strong class="text-slate-800">SELURUH JAMAAH</strong>.', 
+                        'danger', 
+                        async () => {
+                            if (userId) {
+                                // Menghapus dokumen layout utama dari Cloud
+                                const layoutRef = doc(db, 'artifacts', appId, 'public', 'data', 'state', 'layout');
+                                await deleteDoc(layoutRef);
+                                location.reload();
+                            }
+                        }
+                    );
+                });
+            }
+        });
+    </script>
+</body>
+</html>
