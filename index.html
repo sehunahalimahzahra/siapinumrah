@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Materi Zoom Meet - Keberangkatan Umrah</title>
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-    
+
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -42,7 +42,7 @@
             }
         }
     </script>
-    
+
     <style>
         /* Custom Checkbox Styling & Animations */
         .check-container input:checked + div {
@@ -57,7 +57,7 @@
             transform: scale(0.95);
         }
         html { scroll-behavior: smooth; background-color: #f8fafc; }
-        
+
         /* Edit Mode Styles */
         body.edit-mode .editable-text {
             border-bottom: 2px dashed #059669;
@@ -76,7 +76,7 @@
         body.edit-mode .drag-handle { display: inline-block !important; }
         body.edit-mode .add-item-btn,
         body.edit-mode .delete-item-btn { display: flex !important; }
-        
+
         /* Prevent interaction with checkboxes while in edit mode to avoid accidental triggers */
         body.edit-mode .check-container { pointer-events: none; }
         body.edit-mode .editable-text,
@@ -122,7 +122,7 @@
 </head>
 <body class="text-slate-800 antialiased pb-24 font-sans selection:bg-gold-500 selection:text-white transition-colors duration-300">
 
-    <!-- Sticky Progress Bar (Glassmorphism Effect) -->
+    <!-- Sticky Progress Bar -->
     <div class="fixed top-0 left-0 w-full z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-gray-100 dark:border-slate-800 shadow-sm transition-all no-print">
         <div class="px-4 py-3 flex justify-between items-center max-w-4xl mx-auto">
             <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest flex items-center gap-2">
@@ -138,9 +138,8 @@
     <!-- Hero Section -->
     <header class="relative bg-gradient-to-br from-emerald-900 via-emerald-800 to-emerald-900 text-white pt-32 pb-28 px-4 overflow-hidden">
         <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#d4af37 1px, transparent 1px); background-size: 30px 30px;"></div>
-        <!-- Decorative Glow -->
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-emerald-500/20 blur-[100px] rounded-full pointer-events-none"></div>
-        
+
         <div class="relative max-w-4xl mx-auto text-center z-10">
             <div class="inline-flex items-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-5 py-2 text-sm font-medium text-emerald-50 mb-8 shadow-lg">
                 <i class="fa-solid fa-calendar-days mr-2 text-gold-500"></i> 
@@ -154,11 +153,11 @@
                 Halaman ini berisi ringkasan seluruh informasi penting dari sesi Zoom. Silakan baca dengan seksama dan gunakan fitur checklist untuk memastikan tidak ada yang terlewat.
             </p>
 
-            <!-- ⏱️ Fitur Countdown & 🌤️ Widget Info (Cuaca) -->
             <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto no-print">
-                
-                <div class="bg-gradient-to-br from-gold-500/30 to-gold-600/30 backdrop-blur-md border border-gold-400/40 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg transform hover:scale-105 transition-transform">
-                    <span class="text-[10px] uppercase tracking-widest text-gold-200 font-bold mb-2">Hitung Mundur Keberangkatan</span>
+                <div class="bg-gradient-to-br from-gold-500/30 to-gold-600/30 backdrop-blur-md border border-gold-400/40 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg transform hover:scale-105 transition-transform relative">
+                    <span class="text-[10px] uppercase tracking-widest text-gold-200 font-bold mb-1">Hitung Mundur Keberangkatan</span>
+                    <span class="text-base font-black text-white mb-3 tracking-wide drop-shadow-md editable-text">07 September 2026</span>
+                    
                     <div class="flex gap-4 text-white">
                         <div class="text-center"><div class="text-2xl font-black leading-none" id="cd-days">--</div><div class="text-[10px] uppercase mt-1">Hari</div></div>
                         <div class="text-xl font-bold mt-0.5 opacity-50">:</div>
@@ -206,7 +205,6 @@
                 </div>
 
                 <div class="space-y-3" id="grid-manasik">
-                    <!-- Schedule Items -->
                     <div class="group flex items-start p-4 bg-slate-50/50 rounded-2xl border border-slate-100 hover:border-emerald-200 hover:bg-emerald-50/50 hover:shadow-sm transition-all relative">
                         <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
                         <span class="bg-white border border-emerald-100 text-emerald-700 font-bold text-xs px-3 py-1.5 rounded-lg mr-4 flex-shrink-0 mt-0.5 shadow-sm editable-text">07.30 – 08.00</span>
@@ -248,14 +246,14 @@
                         <div class="text-sm font-semibold text-slate-700 mt-1 editable-text">Teknis Perjalanan dan Sesi Tanya Jawab</div>
                     </div>
                 </div>
-                
+
                 <button class="add-item-btn hidden items-center text-sm bg-emerald-50 text-emerald-700 px-4 py-2 rounded-lg hover:bg-emerald-100 font-bold mt-4 transition" onclick="addScheduleItem('grid-manasik')">
                     <i class="fa-solid fa-plus mr-2"></i> Tambah Jadwal
                 </button>
 
                 <div class="mt-8 pt-6 border-t border-gray-100">
                     <label class="check-container flex items-center cursor-pointer group p-3 -mx-3 rounded-xl hover:bg-emerald-50 transition-colors">
-                        <input type="checkbox" class="checklist-item hidden" id="read-manasik-schedule">
+                        <input type="checkbox" class="checklist-item sr-only" id="read-manasik-schedule">
                         <div class="w-7 h-7 rounded-lg border-2 border-gray-300 flex items-center justify-center mr-4 group-hover:border-emerald-500 transition-colors bg-white">
                             <svg class="w-4 h-4 text-white hidden pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                         </div>
@@ -290,7 +288,7 @@
                         <div class="text-sm font-medium text-emerald-200 mt-1 editable-text">+ 2 Tour Leader</div>
                     </div>
                 </div>
-                
+
                 <div class="grid md:grid-cols-2 gap-4 sm:gap-6">
                     <div class="flex items-center p-5 bg-white rounded-2xl border border-gray-100 shadow-sm hover:border-gold-300 transition relative">
                         <div class="bg-gold-50 w-12 h-12 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
@@ -300,7 +298,6 @@
                             <div class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-0.5 editable-text">Tour Leader</div>
                             <div class="font-bold text-gray-800 text-lg editable-text">Nurhidayat & Mahdiasari</div>
                         </div>
-                        <!-- 💬 Direct WhatsApp Button -->
                         <a href="https://wa.me/6281234567890" target="_blank" class="w-10 h-10 rounded-full bg-green-100 hover:bg-green-500 hover:text-white text-green-600 flex items-center justify-center transition-colors shadow-sm no-print" title="Hubungi via WhatsApp">
                             <i class="fa-brands fa-whatsapp text-xl"></i>
                         </a>
@@ -313,16 +310,15 @@
                             <div class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-0.5 editable-text">Muthowif</div>
                             <div class="font-bold text-gray-800 text-lg editable-text">Ustadz Rifqi Wiladni</div>
                         </div>
-                        <!-- 💬 Direct WhatsApp Button -->
                         <a href="https://wa.me/6280987654321" target="_blank" class="w-10 h-10 rounded-full bg-green-100 hover:bg-green-500 hover:text-white text-green-600 flex items-center justify-center transition-colors shadow-sm no-print" title="Hubungi via WhatsApp">
                             <i class="fa-brands fa-whatsapp text-xl"></i>
                         </a>
                     </div>
                 </div>
-                
+
                 <div class="mt-8 pt-6 border-t border-gray-100">
                     <label class="check-container flex items-center cursor-pointer group p-3 -mx-3 rounded-xl hover:bg-emerald-50 transition-colors">
-                        <input type="checkbox" class="checklist-item hidden" id="read-data-jamaah">
+                        <input type="checkbox" class="checklist-item sr-only" id="read-data-jamaah">
                         <div class="w-7 h-7 rounded-lg border-2 border-gray-300 flex items-center justify-center mr-4 group-hover:border-emerald-500 transition-colors bg-white">
                             <svg class="w-4 h-4 text-white hidden pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                         </div>
@@ -378,14 +374,14 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <button class="add-item-btn hidden items-center text-sm bg-emerald-50 text-emerald-700 px-4 py-2 rounded-lg hover:bg-emerald-100 font-bold mt-4 transition" onclick="addStatusItem('grid-status')">
                     <i class="fa-solid fa-plus mr-2"></i> Tambah Info Status
                 </button>
 
                 <div class="mt-8 pt-6 border-t border-gray-100">
                     <label class="check-container flex items-center cursor-pointer group p-3 -mx-3 rounded-xl hover:bg-emerald-50 transition-colors">
-                        <input type="checkbox" class="checklist-item hidden" id="read-status">
+                        <input type="checkbox" class="checklist-item sr-only" id="read-status">
                         <div class="w-7 h-7 rounded-lg border-2 border-gray-300 flex items-center justify-center mr-4 group-hover:border-emerald-500 transition-colors bg-white">
                             <svg class="w-4 h-4 text-white hidden pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                         </div>
@@ -405,11 +401,9 @@
                     </div>
                     <h2 class="text-xl sm:text-2xl font-serif font-extrabold editable-text tracking-wide uppercase drop-shadow-md">3. Detail Penerbangan</h2>
                 </div>
-                
-                <!-- Airline Text Dropdown Selector -->
+
                 <div class="bg-white px-5 py-2.5 rounded-xl border border-emerald-700/50 flex items-center relative group min-w-[160px] justify-center shadow-sm hover:shadow transition-shadow">
                     <span id="airline-name-display" class="font-bold text-slate-800 text-sm tracking-wider uppercase">Saudia Airlines</span>
-                    
                     <select id="airline-selector" class="hidden absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="changeAirline(this.value)">
                         <option value="saudia">Saudia Airlines</option>
                         <option value="lion">Lion Air</option>
@@ -418,13 +412,11 @@
                         <option value="qatar">Qatar Airways</option>
                         <option value="garuda">Garuda Indonesia</option>
                     </select>
-                    
                     <div id="airline-edit-badge" class="hidden absolute -top-2 -right-2 bg-gold-500 text-white text-[10px] font-bold w-6 h-6 items-center justify-center rounded-full shadow-md z-10"><i class="fa-solid fa-chevron-down"></i></div>
                 </div>
             </div>
             <div class="p-6 sm:p-8 bg-slate-50/50">
                 <div class="space-y-6">
-                    <!-- Keberangkatan Boarding Pass -->
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col md:flex-row hover:shadow-md transition">
                         <div class="bg-emerald-600 text-white p-4 md:w-32 flex flex-row md:flex-col items-center justify-between md:justify-center shrink-0">
                             <div class="text-xs font-bold tracking-widest opacity-80 editable-text">BERANGKAT</div>
@@ -454,7 +446,6 @@
                         </div>
                     </div>
 
-                    <!-- Kepulangan Boarding Pass -->
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col md:flex-row hover:shadow-md transition">
                         <div class="bg-amber-500 text-white p-4 md:w-32 flex flex-row md:flex-col items-center justify-between md:justify-center shrink-0">
                             <div class="text-xs font-bold tracking-widest opacity-80 editable-text">PULANG</div>
@@ -487,7 +478,7 @@
 
                 <div class="mt-8 pt-6 border-t border-gray-200">
                     <label class="check-container flex items-center cursor-pointer group p-3 -mx-3 rounded-xl hover:bg-emerald-50 transition-colors">
-                        <input type="checkbox" class="checklist-item hidden" id="read-flight">
+                        <input type="checkbox" class="checklist-item sr-only" id="read-flight">
                         <div class="w-7 h-7 rounded-lg border-2 border-gray-300 flex items-center justify-center mr-4 group-hover:border-emerald-500 transition-colors bg-white">
                             <svg class="w-4 h-4 text-white hidden pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                         </div>
@@ -508,10 +499,9 @@
             </div>
             <div class="p-6 sm:p-8">
                 <div class="grid md:grid-cols-2 gap-4 sm:gap-6">
-                    <!-- Med Check -->
                     <label class="check-container block bg-white border-2 border-slate-100 p-5 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition relative group">
                         <div class="flex items-start">
-                            <input type="checkbox" class="checklist-item hidden" id="chk-med-check">
+                            <input type="checkbox" class="checklist-item sr-only" id="chk-med-check">
                             <div class="w-7 h-7 rounded-lg border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-500 transition-colors">
                                 <svg class="w-4 h-4 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                             </div>
@@ -522,10 +512,9 @@
                         </div>
                     </label>
 
-                    <!-- Vaksin -->
                     <label class="check-container block bg-red-50/50 border-2 border-red-100 p-5 rounded-2xl cursor-pointer hover:border-red-300 hover:shadow-md transition relative group">
                         <div class="flex items-start">
-                            <input type="checkbox" class="checklist-item hidden" id="chk-vaksin">
+                            <input type="checkbox" class="checklist-item sr-only" id="chk-vaksin">
                             <div class="w-7 h-7 rounded-lg border-2 border-red-200 bg-white flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-red-400 transition-colors">
                                 <svg class="w-4 h-4 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                             </div>
@@ -553,9 +542,8 @@
                 </div>
                 <span class="text-xs bg-emerald-500 text-white px-3 py-1.5 rounded-full font-bold editable-text self-start sm:self-auto uppercase tracking-wide">Wajib & Anjuran</span>
             </div>
-            
+
             <div class="p-6 sm:p-8 space-y-10">
-                
                 <!-- Kategori 1: Pribadi Wajib -->
                 <div>
                     <h3 class="font-bold text-lg text-slate-800 mb-4 flex items-center editable-text">
@@ -565,37 +553,37 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="grid-pribadi">
                         <label class="check-container group flex items-start p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item hidden" id="pack-obat">
+                            <input type="checkbox" class="checklist-item sr-only" id="pack-obat">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 mt-0.5 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text leading-relaxed">Obat Pribadi (darah tinggi, gula, asam urat, dsb.) <strong class="text-red-500">WAJIB</strong></span>
                         </label>
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item hidden" id="pack-vitamin">
+                            <input type="checkbox" class="checklist-item sr-only" id="pack-vitamin">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Vitamin & Suplemen</span>
                         </label>
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item hidden" id="pack-masker">
+                            <input type="checkbox" class="checklist-item sr-only" id="pack-masker">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Masker & Hand Sanitizer</span>
                         </label>
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item hidden" id="pack-tisu">
+                            <input type="checkbox" class="checklist-item sr-only" id="pack-tisu">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Tisu Kering & Basah</span>
                         </label>
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item hidden" id="pack-mandi">
+                            <input type="checkbox" class="checklist-item sr-only" id="pack-mandi">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Alat Mandi Pribadi</span>
                         </label>
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item hidden" id="pack-powerbank">
+                            <input type="checkbox" class="checklist-item sr-only" id="pack-powerbank">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Power Bank & Charger</span>
                         </label>
@@ -614,31 +602,31 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="grid-panas">
                         <label class="check-container group flex items-start p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-amber-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item hidden" id="panas-baju">
+                            <input type="checkbox" class="checklist-item sr-only" id="panas-baju">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 mt-0.5 flex-shrink-0 group-hover:border-amber-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text leading-relaxed">Baju muslim adem, longgar & menyerap keringat</span>
                         </label>
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-amber-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item hidden" id="panas-topi">
+                            <input type="checkbox" class="checklist-item sr-only" id="panas-topi">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-amber-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Topi / Payung Kecil</span>
                         </label>
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-amber-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item hidden" id="panas-sunblock">
+                            <input type="checkbox" class="checklist-item sr-only" id="panas-sunblock">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-amber-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Sunscreen / Sunblock & Pelembap</span>
                         </label>
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-amber-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item hidden" id="panas-kacamatag">
+                            <input type="checkbox" class="checklist-item sr-only" id="panas-kacamatag">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-amber-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Kacamata Hitam (Opsional)</span>
                         </label>
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-amber-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item hidden" id="panas-botol">
+                            <input type="checkbox" class="checklist-item sr-only" id="panas-botol">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-amber-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Botol Minum Pribadi / Tumbler</span>
                         </label>
@@ -657,25 +645,25 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="grid-ibadah">
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item hidden" id="ibadah-ihram">
+                            <input type="checkbox" class="checklist-item sr-only" id="ibadah-ihram">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Kain Ihram / Sabuk Ihram (Ikhwan)</span>
                         </label>
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item hidden" id="ibadah-mukena">
+                            <input type="checkbox" class="checklist-item sr-only" id="ibadah-mukena">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Mukena (Akhwat)</span>
                         </label>
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item hidden" id="ibadah-sandal">
+                            <input type="checkbox" class="checklist-item sr-only" id="ibadah-sandal">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Sandal Umrah & Tas Sandal</span>
                         </label>
                         <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                             <button class="delete-item-btn hidden absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                            <input type="checkbox" class="checklist-item hidden" id="ibadah-buku">
+                            <input type="checkbox" class="checklist-item sr-only" id="ibadah-buku">
                             <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-emerald-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                             <span class="text-sm font-medium text-slate-700 editable-text">Al-Qur’an Kecil / Buku Doa</span>
                         </label>
@@ -714,14 +702,14 @@
                         <span class="text-sm text-slate-700 font-medium leading-relaxed editable-text">Power bank WAJIB di tas kabin (TIDAK BOLEH DI BAGASI).</span>
                     </li>
                 </ul>
-                
+
                 <button class="add-item-btn hidden items-center text-sm bg-amber-50 text-amber-700 px-4 py-2 rounded-lg hover:bg-amber-100 font-bold mb-6 transition" onclick="addTextItem('grid-pesawat', 'fa-info-circle')">
                     <i class="fa-solid fa-plus mr-2"></i> Tambah Aturan
                 </button>
 
                 <div class="border-t border-gray-100 pt-6">
                     <label class="check-container flex items-center cursor-pointer group p-3 -mx-3 rounded-xl hover:bg-amber-50 transition-colors">
-                        <input type="checkbox" class="checklist-item hidden" id="read-pesawat">
+                        <input type="checkbox" class="checklist-item sr-only" id="read-pesawat">
                         <div class="w-7 h-7 rounded-lg border-2 border-gray-300 flex items-center justify-center mr-4 group-hover:border-amber-500 transition-colors bg-white">
                             <svg class="w-4 h-4 text-white hidden pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                         </div>
@@ -740,7 +728,7 @@
                 </div>
                 <h2 class="text-xl sm:text-2xl font-serif font-extrabold editable-text tracking-wide uppercase drop-shadow-md">7. Informasi Lainnya</h2>
             </div>
-            
+
             <div class="p-6 sm:p-8">
                 <ul class="space-y-4 mb-8" id="grid-info">
                     <li class="flex items-start relative pr-10 group bg-transparent hover:bg-slate-50 p-3 rounded-xl transition-colors -mx-3">
@@ -764,14 +752,14 @@
                         <span class="text-sm sm:text-base text-slate-700 font-medium editable-text w-full">Bagi yang mengajak keluarga saat manasik mohon konfirmasi sebelumnya.</span>
                     </li>
                 </ul>
-                
+
                 <button class="add-item-btn hidden items-center text-sm bg-emerald-50 text-emerald-700 px-4 py-2 rounded-lg hover:bg-emerald-100 font-bold mb-6 transition" onclick="addTextItem('grid-info', 'fa-check')">
                     <i class="fa-solid fa-plus mr-2"></i> Tambah Informasi
                 </button>
 
                 <div class="border-t border-gray-100 pt-6">
                     <label class="check-container flex items-center cursor-pointer group p-3 -mx-3 rounded-xl hover:bg-emerald-50 transition-colors">
-                        <input type="checkbox" class="checklist-item hidden" id="read-tambahan">
+                        <input type="checkbox" class="checklist-item sr-only" id="read-tambahan">
                         <div class="w-7 h-7 rounded-lg border-2 border-gray-300 flex items-center justify-center mr-4 group-hover:border-emerald-500 transition-colors bg-white">
                             <svg class="w-4 h-4 text-white hidden pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                         </div>
@@ -780,39 +768,6 @@
                 </div>
             </div>
         </section>
-
-        <!-- 8. BEKAL SPIRITUAL (Audio Talbiyah) -->
-        <section class="bg-white rounded-3xl shadow-soft border border-gray-100 overflow-hidden mb-12 sortable-section transition-transform duration-300">
-            <div class="bg-gradient-to-r from-indigo-800 to-indigo-900 text-white px-6 sm:px-8 py-5 border-b border-indigo-950 flex items-center shadow-inner">
-                <i class="fa-solid fa-grip-vertical drag-handle hidden mr-4 text-xl cursor-grab text-indigo-300 hover:text-white transition"></i>
-                <div class="bg-white/10 p-2.5 rounded-xl mr-4 backdrop-blur-sm border border-white/10">
-                    <i class="fa-solid fa-book-quran text-xl text-white"></i>
-                </div>
-                <h2 class="text-xl sm:text-2xl font-serif font-extrabold editable-text tracking-wide uppercase drop-shadow-md">8. Bekal Spiritual</h2>
-            </div>
-            
-            <div class="p-6 sm:p-8">
-                <div class="bg-indigo-50/50 dark:bg-slate-800/50 border border-indigo-100 dark:border-slate-700 rounded-2xl p-6 text-center relative group">
-                    <div class="mb-4">
-                        <span class="bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-300 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest editable-text">Bacaan Talbiyah</span>
-                    </div>
-                    <p class="text-2xl md:text-3xl font-serif font-bold text-slate-800 dark:text-white leading-loose mb-4 editable-text text-right" dir="rtl">
-                        لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لاَ شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ، وَالنِّعْمَةَ، لَكَ وَالْمُلْكَ، لاَ شَرِيكَ لَكَ
-                    </p>
-                    <p class="text-indigo-900 dark:text-indigo-300 font-medium mb-2 editable-text italic">
-                        "Labbaikallahumma labbaik, labbaika laa syariika laka labbaik. Innal hamda wan ni'mata laka wal mulk. Laa syariika lak."
-                    </p>
-                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-6 editable-text">
-                        Artinya: "Aku penuhi panggilan-Mu ya Allah, aku penuhi panggilan-Mu. Aku penuhi panggilan-Mu, tiada sekutu bagi-Mu, aku penuhi panggilan-Mu. Sesungguhnya pujian dan ni'mat adalah milik-Mu, begitu juga kerajaan, tiada sekutu bagi-Mu."
-                    </p>
-                    
-                    <button onclick="playTalbiyah()" id="play-talbiyah-btn" class="inline-flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white rounded-full px-6 py-3 font-bold transition shadow-md no-print hover:-translate-y-0.5">
-                        <i class="fa-solid fa-play mr-2" id="play-icon"></i> <span id="play-text">Dengarkan Audio Niat</span>
-                    </button>
-                </div>
-            </div>
-        </section>
-
     </main>
 
     <!-- Footer Actions -->
@@ -820,7 +775,6 @@
         <button id="reset-btn" class="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white font-medium transition py-2 px-4 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 border border-transparent dark:border-slate-700">
             <i class="fa-solid fa-rotate-left mr-1"></i> Reset Progress
         </button>
-        <!-- 🖨️ Cetak PDF Button -->
         <button onclick="window.print()" class="text-sm text-emerald-700 dark:text-emerald-400 font-bold transition py-2 px-6 rounded-full bg-emerald-100 hover:bg-emerald-200 dark:bg-emerald-900/30 dark:hover:bg-emerald-900/60 shadow-sm border border-emerald-200 dark:border-emerald-800">
             <i class="fa-solid fa-print mr-1"></i> Cetak / Simpan PDF
         </button>
@@ -831,7 +785,6 @@
 
     <!-- Edit & Theme Floating Buttons -->
     <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 no-print">
-        <!-- 🌙 Dark Mode Toggle -->
         <button id="theme-toggle-btn" onclick="toggleTheme()" class="bg-slate-800 dark:bg-amber-400 hover:bg-slate-700 dark:hover:bg-amber-500 text-white dark:text-slate-900 w-12 h-12 rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all transform hover:-translate-y-1 self-end">
             <i class="fa-solid fa-moon dark:hidden"></i>
             <i class="fa-solid fa-sun hidden dark:block"></i>
@@ -841,7 +794,7 @@
         </button>
     </div>
 
-    <!-- Custom Modal Overlay (Replaces alert & confirm) -->
+    <!-- Custom Modal Overlay -->
     <div id="custom-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity opacity-0" id="modal-backdrop"></div>
         <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 relative z-10 transform scale-95 opacity-0 transition-all duration-300" id="modal-content">
@@ -850,9 +803,7 @@
             </div>
             <h3 class="text-xl font-bold text-center text-slate-800 mb-2" id="modal-title"></h3>
             <p class="text-sm text-center text-slate-600 mb-8 leading-relaxed" id="modal-message"></p>
-            <div class="flex flex-col sm:flex-row gap-3 justify-center" id="modal-actions">
-                <!-- Buttons injected dynamically via JS -->
-            </div>
+            <div class="flex flex-col sm:flex-row gap-3 justify-center" id="modal-actions"></div>
         </div>
     </div>
 
@@ -866,7 +817,6 @@
     window.sortableInstance = null;
     let userProgress = {}; 
 
-    // --- 1. Load Data dari JSONBin ---
     async function initCloud() {
         try {
             const response = await fetch(API_URL, {
@@ -891,7 +841,6 @@
         }
     }
 
-    // --- 2. Fungsi Save Global (Untuk PUT ke JSONBin) ---
     async function pushToCloud() {
         try {
             await fetch(API_URL, {
@@ -902,17 +851,14 @@
                 },
                 body: JSON.stringify(appData)
             });
-            console.log("Berhasil tersimpan ke JSONBin");
         } catch (err) {
             console.error("Gagal menyimpan data:", err);
         }
     }
 
-    // --- 3. Override Fungsi Simpan Bawaan ---
     window.saveLayoutToCloud = function() {
         const mainArea = document.getElementById('main-content-area');
         const selectedAirline = document.getElementById('airline-selector')?.value || 'saudia';
-        
         appData.html = mainArea.innerHTML;
         appData.airline = selectedAirline;
         pushToCloud();
@@ -924,7 +870,6 @@
         pushToCloud();
     };
 
-    // --- 4. Fungsi Bawaan Web ---
     const airlines = {
         'saudia': { name: 'Saudia Airlines' },
         'lion': { name: 'Lion Air' },
@@ -955,12 +900,12 @@
         const total = checkboxes.length;
         const checked = document.querySelectorAll('.checklist-item:checked').length;
         const percentage = total === 0 ? 0 : Math.round((checked / total) * 100);
-        
+
         const progressBar = document.getElementById('progress-bar');
         const progressText = document.getElementById('progress-text');
-        
+
         if (!progressBar || !progressText) return; 
-        
+
         progressBar.style.width = `${percentage}%`;
         progressText.innerText = `${percentage}%`;
 
@@ -984,7 +929,7 @@
         const html = `
             <label class="check-container group flex items-center p-4 bg-white border border-gray-200 rounded-2xl cursor-pointer hover:border-${colorClass}-400 hover:shadow-md transition-all relative pr-10 hover:-translate-y-0.5">
                 <button class="delete-item-btn absolute right-3 top-3 text-red-500 hover:text-red-700 bg-red-100 rounded-full w-7 h-7 items-center justify-center z-10 transition-transform hover:scale-110"><i class="fa-solid fa-xmark text-sm"></i></button>
-                <input type="checkbox" class="checklist-item hidden" id="${newId}">
+                <input type="checkbox" class="checklist-item sr-only" id="${newId}">
                 <div class="w-6 h-6 rounded-md border-2 border-gray-300 flex items-center justify-center mr-4 flex-shrink-0 group-hover:border-${colorClass}-400 transition-colors"><svg class="w-3.5 h-3.5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
                 <span class="text-sm font-medium text-slate-700 editable-text w-full" contenteditable="true">Item Baru</span>
             </label>
@@ -1029,44 +974,6 @@
             </li>
         `;
         container.insertAdjacentHTML('beforeend', html);
-    };
-
-    let isPlaying = false;
-    let utterance = null;
-    window.playTalbiyah = function() {
-        const btn = document.getElementById('play-talbiyah-btn');
-        const icon = document.getElementById('play-icon');
-        const text = document.getElementById('play-text');
-
-        if (isPlaying) {
-            window.speechSynthesis.cancel();
-            isPlaying = false;
-            icon.className = 'fa-solid fa-play mr-2';
-            text.innerText = 'Dengarkan Audio Niat';
-            btn.classList.replace('bg-red-500', 'bg-indigo-600');
-            btn.classList.replace('hover:bg-red-600', 'hover:bg-indigo-700');
-            return;
-        }
-
-        const textToSpeak = "Labbaikallahumma labbaik, labbaika laa syariika laka labbaik. Innal hamda wan ni'mata laka wal mulk. Laa syariika lak.";
-        utterance = new SpeechSynthesisUtterance(textToSpeak);
-        utterance.lang = 'id-ID'; 
-        utterance.rate = 0.8; 
-
-        utterance.onend = () => {
-            isPlaying = false;
-            icon.className = 'fa-solid fa-play mr-2';
-            text.innerText = 'Dengarkan Audio Niat';
-            btn.classList.replace('bg-red-500', 'bg-indigo-600');
-            btn.classList.replace('hover:bg-red-600', 'hover:bg-indigo-700');
-        };
-
-        window.speechSynthesis.speak(utterance);
-        isPlaying = true;
-        icon.className = 'fa-solid fa-stop mr-2';
-        text.innerText = 'Hentikan Audio';
-        btn.classList.replace('bg-indigo-600', 'bg-red-500');
-        btn.classList.replace('hover:bg-indigo-700', 'hover:bg-red-600');
     };
 
     window.toggleTheme = function() {
@@ -1116,11 +1023,11 @@
         const modal = document.getElementById('custom-modal');
         const modalBackdrop = document.getElementById('modal-backdrop');
         const modalContent = document.getElementById('modal-content');
-        
+
         document.body.classList.add('modal-open');
         document.getElementById('modal-title').textContent = title;
         document.getElementById('modal-message').innerHTML = message;
-        
+
         const iconContainer = document.getElementById('modal-icon-container');
         const icon = document.getElementById('modal-icon');
         const actions = document.getElementById('modal-actions');
@@ -1135,14 +1042,13 @@
             const isDanger = type === 'danger';
             iconContainer.className = isDanger ? 'flex items-center justify-center w-14 h-14 rounded-full mb-5 mx-auto bg-red-100 text-red-600' : 'flex items-center justify-center w-14 h-14 rounded-full mb-5 mx-auto bg-amber-100 text-amber-600';
             icon.className = isDanger ? 'fa-solid fa-triangle-exclamation text-2xl' : 'fa-solid fa-circle-question text-2xl';
-            
             const confirmBtnColor = isDanger ? 'bg-red-600 hover:bg-red-700' : 'bg-emerald-600 hover:bg-emerald-700';
-            
+
             actions.innerHTML = `
                 <button onclick="closeModal()" class="flex-1 px-4 py-2.5 rounded-xl text-sm font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition">Batal</button>
                 <button id="modal-confirm-btn" class="flex-1 px-4 py-2.5 rounded-xl text-sm font-bold text-white ${confirmBtnColor} transition shadow-sm">Ya, Lanjutkan</button>
             `;
-            
+
             pendingAction = onConfirm;
             document.getElementById('modal-confirm-btn').addEventListener('click', () => {
                 if (pendingAction) pendingAction();
@@ -1160,7 +1066,7 @@
         const modal = document.getElementById('custom-modal');
         const modalBackdrop = document.getElementById('modal-backdrop');
         const modalContent = document.getElementById('modal-content');
-        
+
         modalBackdrop.classList.add('opacity-0');
         modalContent.classList.add('scale-95', 'opacity-0');
         setTimeout(() => {
@@ -1170,23 +1076,39 @@
         }, 300);
     };
 
+    window.initCountdown = function() {
+        const countDownDate = new Date("September 7, 2026 15:50:00").getTime();
+        const timerInterval = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = countDownDate - now;
+            if (distance < 0) {
+                clearInterval(timerInterval);
+                document.getElementById("cd-days").innerText = "00";
+                document.getElementById("cd-hours").innerText = "00";
+                document.getElementById("cd-mins").innerText = "00";
+                return;
+            }
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById("cd-days").innerText = days.toString().padStart(2, '0');
+            document.getElementById("cd-hours").innerText = hours.toString().padStart(2, '0');
+            document.getElementById("cd-mins").innerText = minutes.toString().padStart(2, '0');
+        }, 1000);
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
         if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         }
-        
+
         initCloud(); 
+        initCountdown();
 
         document.addEventListener('change', (e) => {
             if(e.target.classList.contains('checklist-item')) {
                 window.saveProgressToCloud(e.target.id, e.target.checked);
                 window.updateProgress();
-            }
-        });
-
-        document.addEventListener('click', (e) => {
-            if(window.isEditMode && e.target.classList.contains('editable-text')) {
-                // Biarkan browser menghandle klik text
             }
         });
 
@@ -1230,38 +1152,7 @@
                 );
             });
         }
-
-        // --- Script Auto-Refresh (Polling 5 Detik) ---
-        setInterval(async () => {
-            if (window.isEditMode) return;
-
-            try {
-                const response = await fetch(API_URL, {
-                    headers: { 'X-Master-Key': MASTER_KEY }
-                });
-                const result = await response.json();
-                
-                if (result.record) {
-                    const newData = result.record;
-                    const mainArea = document.getElementById('main-content-area');
-                    
-                    if (newData.html && mainArea.innerHTML !== newData.html) {
-                        mainArea.innerHTML = newData.html;
-                        appData.html = newData.html;
-                        applyProgress(); 
-                    }
-                    
-                    if (newData.airline && appData.airline !== newData.airline) {
-                        appData.airline = newData.airline;
-                        window.changeAirline(newData.airline, false);
-                        const sel = document.getElementById('airline-selector');
-                        if (sel) sel.value = newData.airline;
-                    }
-                }
-            } catch (err) {
-                console.error("Gagal melakukan auto-refresh:", err);
-            }
-        }, 5000); 
     });
 </script>
+</body>
 </html>
